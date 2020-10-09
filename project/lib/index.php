@@ -1,0 +1,4 @@
+<!-- THIS FILE SHOULD BE PLACED IN EVERY SUBFOLDER, IT REDIRECTS TO THE MAIN INDEX.PHP -->
+<?php
+header("Location: ../index.php");
+?>
