@@ -24,7 +24,7 @@ if (isset($_POST["saved"])) {
 		$email = $_POST["email"];
 		//Select one user who has the same email as the new email submitted.
 		$stmt = $db->prepare("SELECT COUNT(1) as InUse from Users where email = :email");
-		$stmt->execute();
+		$stmt->execute([":email" => $email]);
 		$result = $stmt->fetch(PDO::FETCH_ASSOC);
 		$inUse = 1; //default it to a failure scenario
 		
@@ -64,6 +64,7 @@ if (isset($_POST["saved"])) {
         }
 		
         if ($inUse > 0) { echo "Username is already in use"; $isValid = false; }
+		
         else { $newUsername = $username; }
     }
 	
@@ -74,17 +75,25 @@ if (isset($_POST["saved"])) {
 	if ($isValid) {
 		//Update the User with the same id, changing their username and email
         $stmt = $db->prepare("UPDATE Users set email = :email, username= :username where id = :id");
+
         $r = $stmt->execute([":email" => $newEmail, ":username" => $newUsername, ":id" => get_user_id()]);
 		
-        if ($r) { echo "Updated profile"; }
+        if ($r) { echo "Updated profile<br>"; }
 		
-        else { echo "Error updating profile"; }
+        else { echo "Error updating profile<br>"; }
 		
         //Check if theres a password reset request
         if (!empty($_POST["password"]) && !empty($_POST["confirm"])) {
 			
+			$stmt = $db->prepare("SELECT password from Users WHERE id = :id");
+			$stmt->execute([":id" => get_user_id()]);
+			
+			$result = $stmt->fetch(PDO::FETCH_ASSOC);
+			
+			$password_hash_from_db = $result["password"];
+			
 			//Check if the reset request is valid
-            if ($_POST["password"] == $_POST["confirm"]) {
+            if (($_POST["password"] == $_POST["confirm"]) && password_verify($_POST["current"], $password_hash_from_db)) {
 				
                 $password = $_POST["password"];
                 $hash = password_hash($password, PASSWORD_BCRYPT);
@@ -97,6 +106,8 @@ if (isset($_POST["saved"])) {
 				
                 else { echo "Error resetting password"; }
             }
+			
+			else { echo "Incorrect current password!<br>";}
         }
 		
 		//Get email and username from at most one user with the same ID (in case anything changed)
@@ -125,6 +136,8 @@ if (isset($_POST["saved"])) {
     <label for="username">Username</label>
     <input type="text" maxlength="60" name="username" value="<?php safer_echo(get_username()); ?>"/>
     <!-- DO NOT PRELOAD PASSWORD-->
+	<label for="currpw">Current Password</label>
+    <input type="password" name="current"/>
     <label for="pw">Password</label>
     <input type="password" name="password"/>
     <label for="cpw">Confirm Password</label>

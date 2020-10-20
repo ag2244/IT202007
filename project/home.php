@@ -2,8 +2,12 @@
 <?php
 //we use this to safely get the email to display
 $email = "";
-if (isset($_SESSION["user"]) && isset($_SESSION["user"]["email"])) {
-    $email = $_SESSION["user"]["email"];
+if (isset($_SESSION["user"]) && isset($_SESSION["user"]["username"])) {
+    $username = $_SESSION["user"]["username"];
 }
 ?>
-<p>Welcome, <?php echo $email; ?></p>
+<p>Welcome, <?php 
+	if (isset($_SESSION["user"]) && isset($_SESSION["user"]["username"]))
+		{echo $username;} 
+	else {echo "please log in or register";}
+?></p>

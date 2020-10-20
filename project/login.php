@@ -6,7 +6,11 @@
 <p>Hi professor!</p>
 <form method="POST">
   <label for="email">Email:</label>
-  <input type="email" id="email" name="email" required/>
+  <input type="email" id="email" name="email" />
+  
+  <label for="username">Username:</label>
+  <input type="username" id="username" name="username" />
+  
   <label for="p1">Password:</label>
   <input type="password" id="p1" name="password" required/>
   <!-- input of submit has value "Login": meaning the submitted form's data has the value of "Login" -->
@@ -84,17 +88,17 @@ if (isset($_POST["login"])) {
 					header("Location: home.php");
 				}
 			
-				else { echo "<br>INVALID PASSWORD<br>"; }
+				else { echo "<br>Invalid Password!<br>"; }
 			
 			}
 		
-			else { echo "<br>INVALID USER<br>"; }
+			else { echo "<br>Account does not exist!<br>"; }
 		
 		}
 		
 	}
 	
-	else{ echo "There was a validation issue";  }
+	else{ echo "There was a validation issue!";  }
 	
 }	
 ?>

@@ -1,0 +1,62 @@
+/* design intentionally made horrible to see who doesn't change it*/
+
+/* set font and fontsize for the body */
+body {
+    font-family: consolas;
+    font-size: 15px;
+    background-color:#a9b6bf
+}
+
+/* for class nav (navigation bar) (making it horizontal) */
+ul[class="nav"]{
+    list-style-type: none;
+    font-size: 20;
+    font-family: arial;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #025f6e;
+}
+
+/* Apply CSS to child List-Items of nav class */
+.nav > li {
+    float: left;
+}
+
+/* Apply CSS to all Anchor tags of list-items of nav class */
+.nav > li a {
+    display: block;
+    color: #ffffff;
+    text-align: center;
+    padding: 16px;
+    text-decoration: none;
+}
+
+/* Change Link Hover color */
+.nav > li a:hover {
+    background-color: #063986;
+    text-decoration:underline;
+}
+
+/* REST: uses nth-of-type to target specific indexes of elements (poor waterfall effect) */
+input, select {
+    width: 100%;
+    background: #8ca5bd;
+    padding: 12px 20px;
+    margin: 18px 0;
+    display: block;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type=submit] {
+    width: 50%;
+    background-color: #025f6e;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: 1px solid #ffffff;;
+    border-radius: 20px;
+    cursor: grab;
+}
