@@ -11,5 +11,6 @@ session_destroy();
 <?php require_once(__DIR__ . "/partials/nav.php"); ?>
 
 <?php
-echo "Successfully logged out!<br>";
+flash("Successfully logged out!<br>");
+die(header("Location: login.php"));
 ?>

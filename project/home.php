@@ -10,4 +10,6 @@ if (isset($_SESSION["user"]) && isset($_SESSION["user"]["username"])) {
 	if (isset($_SESSION["user"]) && isset($_SESSION["user"]["username"]))
 		{echo $username;} 
 	else {echo "please log in or register";}
-?></p>
+?></p
+
+<?php require(__DIR__ . "/partials/flash.php");

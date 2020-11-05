@@ -35,7 +35,7 @@ if (isset($_POST["saved"])) {
 			catch (Exception $e) {}	
 		}
 		
-		if ($inUse > 0) { echo "Email is already in use"; $isValid = false; }
+		if ($inUse > 0) { flash("Email is already in use"); $isValid = false; }
 		
 		else { $newEmail = $email; }
 		
@@ -63,7 +63,7 @@ if (isset($_POST["saved"])) {
             catch (Exception $e) { }
         }
 		
-        if ($inUse > 0) { echo "Username is already in use"; $isValid = false; }
+        if ($inUse > 0) { flash("Username is already in use"); $isValid = false; }
 		
         else { $newUsername = $username; }
     }
@@ -78,9 +78,9 @@ if (isset($_POST["saved"])) {
 
         $r = $stmt->execute([":email" => $newEmail, ":username" => $newUsername, ":id" => get_user_id()]);
 		
-        if ($r) { echo "Updated profile<br>"; }
+        if ($r) { flash("Updated profile<br>"); }
 		
-        else { echo "Error updating profile<br>"; }
+        else { flash("Error updating profile<br>"); }
 		
         //Check if theres a password reset request
         if (!empty($_POST["password"]) && !empty($_POST["confirm"])) {
@@ -102,12 +102,12 @@ if (isset($_POST["saved"])) {
                 $stmt = $db->prepare("UPDATE Users set password = :password where id = :id");
                 $r = $stmt->execute([":id" => get_user_id(), ":password" => $hash]);
 				
-                if ($r) { echo "Reset password"; }
+                if ($r) { flash("Reset password"); }
 				
-                else { echo "Error resetting password"; }
+                else { flash("Error resetting password"); }
             }
 			
-			else { echo "Incorrect current password!<br>";}
+			else { flash("Incorrect current password!<br>");}
         }
 		
 		//Get email and username from at most one user with the same ID (in case anything changed)

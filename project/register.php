@@ -21,10 +21,10 @@ if (isset($_POST["register"])) {
     $isValid = true;
     //check if passwords match on the server side
     if ($password == $confirm) {
-        echo "Passwords match <br>";
+        flash("Passwords match <br>");
     }
     else {
-        echo "Passwords don't match<br>";
+        flash("Passwords don't match<br>");
         $isValid = false;
     }
     if (!isset($email) || !isset($password) || !isset($confirm)) {
@@ -45,20 +45,21 @@ if (isset($_POST["register"])) {
             echo "db returned: " . var_export($r, true);
             $e = $stmt->errorInfo();
             if ($e[0] == "00000") {
-                echo "<br>Welcome! You successfully registered, please login.";
+                flash("<br>Welcome! You successfully registered, please login.");
             }
             else {
                 if ($e[0] == "23000") {//code for duplicate entry
-                    echo "<br>Either username or email is already registered, please try again";
+                    flash("<br>Either username or email is already registered, please try again");
                 }
                 else {
-                    echo "uh oh something went wrong: " . var_export($e, true);
+                    //echo "uh oh something went wrong: " . var_export($e, true);
+					flash("Something went wrong!");
                 }
             }
         }
     }
     else {
-        echo "There was a validation issue";
+        flash("There was a validation issue");
     }
 }
 //safety measure to prevent php warnings
