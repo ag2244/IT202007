@@ -245,30 +245,71 @@ function moveBall(ball) {
 }
 
 function checkPaddleCollision(ball) {
-    // Bounce the ball off the paddles
-    if (ball.y + ball.h / 2 >= leftPaddle.y && ball.y + ball.h / 2 <= leftPaddle.y + leftPaddle.h) {
-        if (ball.x <= leftPaddle.x + leftPaddle.w) {
-            bounceBall(ball);
-        }
+    
+	let collided = true;
+	
+	//rectangle y + h = bottom side of the rectangle
+	
+	//Is ball or left paddle on left side of the other?
+    if ((ball.x >= (leftPaddle.x + leftPaddle.w)) || (leftPaddle.x >= (ball.x + ball.w))) {
+        collided = false;
     }
-    if (ball.y + ball.h / 2 >= rightPaddle.y && ball.y + ball.h / 2 <= rightPaddle.y + rightPaddle.h) {
-        if (ball.x + ball.w >= rightPaddle.x) {
-            bounceBall(ball);
-        }
+	
+	//Is ball or left paddle below the other?
+	if (((ball.y + ball.h) <= leftPaddle.y) || ((leftPaddle.y + leftPaddle.h) <= ball.y)) {
+        collided = false;
     }
+	
+	//Is ball or right paddle on left side of the other?
+    if ((ball.x >= (rightPaddle.x + rightPaddle.w)) || (rightPaddle.x >= (ball.x + ball.w))) {
+        collided = false;
+    }
+	
+	//Is ball or right paddle below the other?
+	if (((ball.y + ball.h) <= rightPaddle.y) || ((rightPaddle.y + rightPaddle.h) <= ball.y)) {
+        collided = false;
+    }
+	
+	console.log(collided);
+	
+	//TEST
+	/*
+	let c = true;
+	
+	//Is ball or right paddle on left side of the other?
+    if ((leftPaddle.x >= (rightPaddle.x + rightPaddle.w)) || (rightPaddle.x >= (leftPaddle.x + leftPaddle.w))) {
+        c = false;
+    }
+	
+	//Is ball or right paddle below the other?
+	if (((leftPaddle.y + leftPaddle.h) <= rightPaddle.y) || ((rightPaddle.y + rightPaddle.h) <= leftPaddle.y)) {
+        c = false;
+    }
+	
+	console.log(c);
+	
+	if (c == true) console.log("cccc");
+	*/
+	//END TEST
+	
+	if (collided == true) {console.log("collided!"); bounceBall(ball);}
 }
 
 function checkScore(ball, index) {
 	// Score if the ball goes past a paddle
-	if (ball.x < leftPaddle.x) {
+	if (ball.x < 0) {
 		rightScore++;
 		//resetBall();
+		
+		//remove the ball
 		balls.splice(index, 1);
 	} 
 	
-	else if (ball.x + ball.w > rightPaddle.x + rightPaddle.w) {
+	else if (ball.x + ball.w > canvas.width) {
 		leftScore++;
 		//resetBall();
+		
+		//remove the ball
 		balls.splice(index, 1);
 	}
 	
