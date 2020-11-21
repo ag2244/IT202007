@@ -40,6 +40,13 @@ function get_user_id() {
     return -1;
 }
 
+function getLifetimePoints() {
+	if (is_logged_in() && isset($_SESSION["user"]["lifetimePoints"])) {
+        return $_SESSION["user"]["lifetimePoints"];
+    }
+	return "asd";
+}
+
 function safer_echo($var) {
     if (!isset($var)) {
         echo "";
@@ -68,6 +75,55 @@ function getMessages() {
     }
     return array();
 }
+
+function getURL($path) {
+    if (substr($path, 0, 1) == "/") {
+        return $path;
+    }
+    return $_SERVER["CONTEXT_PREFIX"] . "/project/$path";
+}
 //end flash
 
 ?>
+
+<!-- Bottom 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bottom 2 Electric Boogaloo -->
