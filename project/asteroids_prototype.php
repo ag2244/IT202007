@@ -1,6 +1,14 @@
-<!DOCTYPE html>
-<html>
-<head>
+<?php require_once(__DIR__ . "/partials/nav.php"); ?>
+<?php
+/*
+if (!is_logged_in()) {
+    //this will redirect to login and kill the rest of this script (prevent it from executing)
+    flash("You must be logged in to access this page");
+    die(header("Location: login.php"));
+}
+*/
+?>
+
 <script>
 
 var canvas;
@@ -186,14 +194,18 @@ function checkShootBullet() {
 	}
 }
 
-function moveBullet(bullet) {
+function moveBullet(bullet, bulletIndex) {
 
 	bullet.x += bullet.sX;
 	bullet.y += bullet.sY;
 
 	// Bounce the ball off the top/bottom
-	if (bullet.y < 0 || bullet.y + bullet.h > canvas.height) {
-		bullet.sY *= -1;
+	if (bullet.y + bullet.h < 0 || bullet.y > canvas.height) {
+		bullets.splice(bulletIndex, 1);
+	}
+	
+	if (bullet.x + bullet.w < 0 || bullet.x > canvas.width) {
+		bullets.splice(bulletIndex, 1);
 	}
 
 }
@@ -260,19 +272,47 @@ function checkCollision() {
         collided = false;
     }
 	
-	if (collided) {
+	/*if (collided) {
 	
 		context.fillStyle = '#000000';
 		context.font = '24px Arial';
 		context.textAlign = 'center';
 		context.fillText('Two paddles have collided!', canvas.width/2, 24);
 	
-	}
+	}*/
+	
+	return collided;
 }
 
 function erase() {
 	context.fillStyle = '#FFFFFF';
 	context.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+function sendScore() {
+
+		
+	
+}
+
+function checkDied() {
+
+	if (checkCollision()) {
+	
+		clearInterval(loop);
+		
+		//erase();
+		
+		context.fillStyle = '#000000';
+		context.font = '24px Arial';
+		context.textAlign = 'center';
+		context.fillText('Dead: Not big surprise', canvas.width/2, 24);
+		context.fillText('Final Score: ' + hits, canvas.width/2, 50);
+		
+		//sendScore();
+		
+	}
+
 }
 
 function gameLoop() {
@@ -289,7 +329,7 @@ function gameLoop() {
 	if (bulletTimer > 0) { bulletTimer--; }
 	
 	for (let i = 0; i < bullets.length; i++) {
-		moveBullet(bullets[i]);
+		moveBullet(bullets[i], i);
 		
 		if (checkHit(bullets[i], rightPaddle)) {
 			//destroy bullet
@@ -301,11 +341,11 @@ function gameLoop() {
 	
 	drawScore()
 	
-	checkCollision();
+	checkDied();
 }
 
 </script>
-</head>
+<html>
 <body onload = "init();">
 	<main>
 		<canvas id="board" width="600px" height="600px" style="border: 1px solid black;"> </canvas>

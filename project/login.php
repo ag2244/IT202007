@@ -48,7 +48,7 @@ if (isset($_POST["login"])) {
 		
 		if (isset($db)) {
 			//prepared statement means: SELECT the email and password from at most 1 entry where email is equal to :email placeholder.
-			$stmt = $db->prepare("SELECT id, email, username, password, lifetimePoints from Users WHERE email = :email LIMIT 1");
+			$stmt = $db->prepare("SELECT id, email, username, password from Users WHERE email = :email LIMIT 1");
 			
 			$params = array(":email" => $email);
 			$r = $stmt->execute($params);
@@ -79,14 +79,11 @@ if (isset($_POST["login"])) {
 					//let's create a session for our user based on the other data we pulled from the table
 					$_SESSION["user"] = $result;//we can save the entire result array since we removed password
 					if ($roles) {
-						$_SESSION["user"]["roles"];
+						$_SESSION["user"]["roles"] = $roles;
 					}
 					else {
 						$_SESSION["user"]["roles"] = [];
 					}
-					
-					$_SESSION["user"]["lifetimePoints"] = 
-					
 					//on successful login let's serve-side redirect the user to the home page.
 					header("Location: home.php");
 				}

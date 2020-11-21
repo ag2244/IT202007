@@ -245,6 +245,19 @@ function moveBall(ball) {
 }
 
 function checkPaddleCollision(ball) {
+<<<<<<< HEAD
+    // Bounce the ball off the paddles
+    if (ball.y + ball.h / 2 >= leftPaddle.y && ball.y + ball.h / 2 <= leftPaddle.y + leftPaddle.h) {
+        if (ball.x <= leftPaddle.x + leftPaddle.w) {
+            bounceBall(ball);
+        }
+    }
+    if (ball.y + ball.h / 2 >= rightPaddle.y && ball.y + ball.h / 2 <= rightPaddle.y + rightPaddle.h) {
+        if (ball.x + ball.w >= rightPaddle.x) {
+            bounceBall(ball);
+        }
+    }
+=======
     
 	let collided = true;
 	
@@ -293,10 +306,22 @@ function checkPaddleCollision(ball) {
 	//END TEST
 	
 	if (collided == true) {console.log("collided!"); bounceBall(ball);}
+>>>>>>> ec140823463a05d23be4b2ce53ac41bb318513dd
 }
 
 function checkScore(ball, index) {
 	// Score if the ball goes past a paddle
+<<<<<<< HEAD
+	if (ball.x < leftPaddle.x) {
+		rightScore++;
+		//resetBall();
+		balls.splice(index, 1);
+	} 
+	
+	else if (ball.x + ball.w > rightPaddle.x + rightPaddle.w) {
+		leftScore++;
+		//resetBall();
+=======
 	if (ball.x < 0) {
 		rightScore++;
 		//resetBall();
@@ -310,6 +335,7 @@ function checkScore(ball, index) {
 		//resetBall();
 		
 		//remove the ball
+>>>>>>> ec140823463a05d23be4b2ce53ac41bb318513dd
 		balls.splice(index, 1);
 	}
 	

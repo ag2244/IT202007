@@ -129,10 +129,8 @@ if (isset($_POST["saved"])) {
     }
 }
 ?>
-<?php flash(getLifetimePoints()); ?>
 
 <form method="POST">
-	
     <label for="email">Email</label>
     <input type="email" name="email" value="<?php safer_echo(get_email()); ?>"/>
     <label for="username">Username</label>
