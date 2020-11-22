@@ -105,34 +105,6 @@ if (isset($_POST["login"])) {
 
 <?php require(__DIR__ . "/partials/flash.php"); ?>
 
-<!-- Bottom -->
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- Bottom 2 Electric Boogaloo -->

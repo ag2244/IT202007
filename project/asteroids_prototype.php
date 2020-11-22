@@ -23,7 +23,7 @@ var paddleHeight = 100;
 var paddleSpeed = 2;
 
 var bulletSize = 5;
-var bulletSpeed = 5;
+var bulletSpeed = 7.5;
 
 var drawables = [];
 
@@ -291,7 +291,30 @@ function erase() {
 
 function sendScore() {
 
-		
+	let xhttp = new XMLHttpRequest();
+	
+	xhttp.onreadystatechange = function () {
+		if (this.readyState == 4 && this.status == 200) {
+			
+			console.log(this.responseText);
+			
+			let json = JSON.parse(this.responseText);
+			if (json) {
+				if (json.status == 200) {
+					alert("YOU DIED!\nFINAL SCORE: " + json.score);
+					location.reload();
+				} else {
+					alert("JSON.ERROR: " + json.error);
+				}
+			}
+		}
+	};
+	
+	xhttp.open("POST", "<?php echo getURL("api/newScore.php");?>", true);
+	//this is required for post ajax calls to submit it as a form
+	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	//map any key/value data similar to query params
+	xhttp.send("score=" + hits + "&gameName=AsteroidsPrototype");
 	
 }
 
@@ -303,13 +326,7 @@ function checkDied() {
 		
 		//erase();
 		
-		context.fillStyle = '#000000';
-		context.font = '24px Arial';
-		context.textAlign = 'center';
-		context.fillText('Dead: Not big surprise', canvas.width/2, 24);
-		context.fillText('Final Score: ' + hits, canvas.width/2, 50);
-		
-		//sendScore();
+		sendScore();
 		
 	}
 

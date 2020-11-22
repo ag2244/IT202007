@@ -86,44 +86,8 @@ function getURL($path) {
 
 ?>
 
-<!-- Bottom 1
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Bottom 2 Electric Boogaloo -->
