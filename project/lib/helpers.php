@@ -2,6 +2,47 @@
 session_start();//we can start our session here so we don't need to worry about it on other pages
 require_once(__DIR__ . "/db.php");
 
+function getTopScores() {
+	
+	$topScores = [
+		"weekly" => [],
+		"monthly" => [],
+		"lifetime" => [],
+	];
+	
+	$userID = get_user_id();
+	$db = getDB();
+	
+	$stmt = $db->prepare("SELECT created, score FROM Scores WHERE user_id = :user_id ORDER BY score DESC LIMIT 10");
+	$stmt->execute([ ":user_id" => $userID ]);
+	$topScores["lifetime"] = $stmt->fetchAll(PDO::FETCH_GROUP);
+	
+	if (!$topScores["lifetime"]) {return "No scores available";}
+	
+	$lastWeek = date("Y-m-d H:i:s", strtotime("-7 days"));
+	
+	$stmt = $db->prepare("SELECT created, score FROM Scores WHERE user_id = :user_id AND created >= :lastWeek ORDER BY score DESC LIMIT 10");
+	$stmt->execute([
+		":user_id" => $userID,
+		":lastWeek" => $lastWeek
+		]);
+	$topScores["weekly"] = $stmt->fetchAll(PDO::FETCH_GROUP);
+	
+	$lastMonth = date("Y-m-d H:i:s", strtotime("-30 days"));
+	
+	$stmt = $db->prepare("SELECT created, score FROM Scores WHERE user_id = :user_id AND created >= :lastMonth ORDER BY score DESC LIMIT 10");
+	$stmt->execute([
+		":user_id" => $userID,
+		":lastMonth" => $lastMonth
+		]);
+	$topScores["monthly"] = $stmt->fetchAll(PDO::FETCH_GROUP);
+	
+	if (!$topScores["lifetime"]) {return "No scores available";}
+	
+	return $topScores;
+	
+}
+
 //Check if user is logged in
 function is_logged_in(){
 	return isset($_SESSION["user"]);
