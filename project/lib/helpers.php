@@ -2,22 +2,24 @@
 session_start();//we can start our session here so we don't need to worry about it on other pages
 require_once(__DIR__ . "/db.php");
 
-function getTopScores() {
-	
-	$topScores = [
-		"weekly" => [],
-		"monthly" => [],
-		"lifetime" => [],
-	];
+function getTopLifetime() {
 	
 	$userID = get_user_id();
 	$db = getDB();
 	
 	$stmt = $db->prepare("SELECT created, score FROM Scores WHERE user_id = :user_id ORDER BY score DESC LIMIT 10");
 	$stmt->execute([ ":user_id" => $userID ]);
-	$topScores["lifetime"] = $stmt->fetchAll(PDO::FETCH_GROUP);
+	$topScores = $stmt->fetchAll(PDO::FETCH_GROUP);
 	
-	if (!$topScores["lifetime"]) {return "No scores available";}
+	if (!$topScores) {return "No scores available";}
+	
+	return $topScores;
+}
+
+function getTopWeekly() {
+	
+	$userID = get_user_id();
+	$db = getDB();
 	
 	$lastWeek = date("Y-m-d H:i:s", strtotime("-7 days"));
 	
@@ -26,7 +28,18 @@ function getTopScores() {
 		":user_id" => $userID,
 		":lastWeek" => $lastWeek
 		]);
-	$topScores["weekly"] = $stmt->fetchAll(PDO::FETCH_GROUP);
+	$topScores = $stmt->fetchAll(PDO::FETCH_GROUP);
+	
+	if (!$topScores) {return "No scores available";}
+	
+	return $topScores;
+	
+}
+
+function getTopMonthly() {
+
+	$userID = get_user_id();
+	$db = getDB();
 	
 	$lastMonth = date("Y-m-d H:i:s", strtotime("-30 days"));
 	
@@ -37,7 +50,7 @@ function getTopScores() {
 		]);
 	$topScores["monthly"] = $stmt->fetchAll(PDO::FETCH_GROUP);
 	
-	if (!$topScores["lifetime"]) {return "No scores available";}
+	if (!$topScores) {return "No scores available";}
 	
 	return $topScores;
 	
