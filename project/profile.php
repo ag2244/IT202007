@@ -130,6 +130,50 @@ if (isset($_POST["saved"])) {
 }
 ?>
 
+<p>
+	<h>
+		<b>LIFETIME SCORES:</b>
+	</h>
+</p>
+
+<?php
+
+
+	$topLifetime = getTopLifetime();
+
+	$scoreTable = '<table border="1" cellspacing="0" cellpadding="2"><tr>';
+
+	$scoreTable .= '<th>Personal Ranking</th><th>Score</th><th>Date of Creation</th>';
+
+	$ranking = 1;
+
+	foreach($topLifetime as &$scoreInfo) {
+		
+		$scoreTable .= '<tr>';
+		
+		$scoreTable .= 
+			'<td>'
+			. $ranking
+			. '</td><td>'
+			. $scoreInfo["score"]
+			. '</td><td>'
+			. $scoreInfo["created"]
+			. '</td>';
+		
+		$scoreTable .= '</tr>';
+		
+		$ranking++;
+		
+	}
+
+	$scoreTable .= '</table>'; 
+
+	echo $scoreTable;
+
+?>
+
+<br>
+
 <form method="POST">
     <label for="email">Email</label>
     <input type="email" name="email" value="<?php safer_echo(get_email()); ?>"/>

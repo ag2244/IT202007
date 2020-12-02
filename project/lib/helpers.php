@@ -9,7 +9,7 @@ function getTopLifetime() {
 	
 	$stmt = $db->prepare("SELECT created, score FROM Scores WHERE user_id = :user_id ORDER BY score DESC LIMIT 10");
 	$stmt->execute([ ":user_id" => $userID ]);
-	$topScores = $stmt->fetchAll(PDO::FETCH_GROUP);
+	$topScores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	
 	if (!$topScores) {return "No scores available";}
 	
@@ -28,7 +28,7 @@ function getTopWeekly() {
 		":user_id" => $userID,
 		":lastWeek" => $lastWeek
 		]);
-	$topScores = $stmt->fetchAll(PDO::FETCH_GROUP);
+	$topScores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	
 	if (!$topScores) {return "No scores available";}
 	
@@ -48,7 +48,7 @@ function getTopMonthly() {
 		":user_id" => $userID,
 		":lastMonth" => $lastMonth
 		]);
-	$topScores["monthly"] = $stmt->fetchAll(PDO::FETCH_GROUP);
+	$topScores["monthly"] = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	
 	if (!$topScores) {return "No scores available";}
 	

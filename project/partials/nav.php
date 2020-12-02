@@ -11,6 +11,8 @@ require_once(__DIR__ . "/../lib/helpers.php");
 	<!-- Navigate to Home (home.php) button -->
 	<li><a href="<?php echo getURL("home.php");?>">Home</a></li>
 	
+	<li><a href="<?php echo getURL("asteroids_prototype.php");?>">Asteroids Prototype</a></li>
+	
 	<!-- If not logged in, put a log in and register button -->
 	<?php if(!is_logged_in()):?>
 		<li><a href="<?php echo getURL("login.php"); ?>">Login</a></li>
@@ -28,6 +30,7 @@ require_once(__DIR__ . "/../lib/helpers.php");
 	<?php if(is_logged_in()):?>
 		<li><a href="<?php echo getURL("profile.php"); ?>">Profile</a></li>
 		<li><a href="<?php echo getURL("logout.php"); ?>">Logout</a></li>
+		<li><a href="<?php echo getURL("makeCompetition.php"); ?>">Start a Competition</a></li>
 	<?php endif; ?>
 </ul>
 </nav>
