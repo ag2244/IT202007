@@ -5,35 +5,47 @@ if (!is_logged_in()) { die( header("Location: login.php")); }
 ?>
 
 <form method="POST">
-	<label>Competition Name</label>
-	<input type="name" name="name"/>
+
+	<div class="form-group">
+		<label>Competition Name</label>
+		<input class="form-group" type="name" name="name"/>
+	</div>
+
+	<div class="form-group">
+		<label>Competition Duration (Days)</label>
+		<input class="form-group" type="duration" name="duration"/>
+	</div>
+
+	<div class="form-group">
+		<label>Minimum Score to Qualify</label>
+		<input class="form-group" type="min_score" name="min_score"/>
+	</div>
+
+	<div class="form-group">
+		<label>First Place Reward Percentage (Out of 100)</label>
+		<input class="form-group" type="first_place_per" name="first_place_per"/>
+	</div>
+
+	<div class="form-group">
+		<label>Second Place Reward Percentage (Out of 100)</label>
+		<input class="form-group" type="second_place_per" name="second_place_per"/>
+	</div>
+
+	<div class="form-group">
+		<label>Third Place Reward Percentage (Out of 100)</label>
+		<input class="form-group" type="third_place_per" name="third_place_per"/>
+	</div>
+
+	<div class="form-group">
+		<label>Entry Fee</label>
+		<input class="form-group" type="fee" name="fee"/>
+	</div>
 	
-	<label>Competition Duration (Days)</label>
-	<input type="duration" name="duration"/>
-	
-	<label>Overall Competition Reward</label>
-	<input type="reward" name="reward"/>
-	
-	<label>Minimum Score to Qualify</label>
-	<input type="min_score" name="min_score"/>
-	
-	<label>First Place Reward Percentage (Out of 100)</label>
-	<input type="first_place_per" name="first_place_per"/>
-	
-	<label>Second Place Reward Percentage (Out of 100)</label>
-	<input type="second_place_per" name="second_place_per"/>
-	
-	<label>Third Place Reward Percentage (Out of 100)</label>
-	<input type="third_place_per" name="third_place_per"/>
-	
-	<label>Entry Fee</label>
-	<input type="fee" name="fee"/>
-	
-	<input type="submit" name="newComp" value="Create Competition"/>
+	<input class="form-control" type="submit" name="newComp" value="Create Competition"/>
 </form>
 
 
-<?php echo "test";
+<?php
 
 if(isset($_POST["newComp"])){
 	//TODO add proper validation/checks
@@ -41,7 +53,7 @@ if(isset($_POST["newComp"])){
 	$created = date('Y-m-d H:i:s');//calc
 	$duration = $_POST["duration"];
 	$expires = date('Y-m-d H:i:s', strtotime($duration . " days"));
-	$reward = $_POST["reward"];
+	$reward = 1;
 	$min_score = $_POST["min_score"];
 	$first_place_per = $_POST["first_place_per"];
 	$second_place_per = $_POST["second_place_per"];

@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `Competitions` (
 
 /* Will need an association table CompetitionParticipants (id, comp_id, user_id, created): Comp_id and user_id should be a composite unique key (user can only join a competition once) */
 
-CREATE TABLE IF NOT EXISTS `Competition Participants` (
+CREATE TABLE IF NOT EXISTS `CompetitionParticipants` (
 	`id` INT NOT NULL AUTO_INCREMENT
 	, `comp_id` INT NOT NULL
 	, `user_id` INT NOT NULL

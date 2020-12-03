@@ -4,16 +4,23 @@
 <?php require_once(__DIR__ . "/partials/nav.php"); ?>
 
 <form method="POST">
-  <label for="email">Email:</label>
-  <input type="email" id="email" name="email" />
-  
-  <label for="username">Username:</label>
-  <input type="username" id="username" name="username" />
-  
-  <label for="p1">Password:</label>
-  <input type="password" id="p1" name="password" required/>
-  <!-- input of submit has value "Login": meaning the submitted form's data has the value of "Login" -->
-  <input type="submit" name="login" value="Login"/> 
+	<div class="form-group">
+		<label for="email">Email:</label>
+		<input class="form-group" type="email" id="email" name="email" />
+	</div>
+
+	<div class="form-group">
+		<label for="username">Username:</label>
+		<input class="form-group" type="username" id="username" name="username" />
+	</div>
+
+	<div class="form-group">
+		<label for="p1">Password:</label>
+		<input class="form-group" type="password" id="p1" name="password" required/>
+	</div>
+		
+	<!-- input of submit has value "Login": meaning the submitted form's data has the value of "Login" -->
+	<input class="form-control" type="submit" name="login" value="Login"/> 
 </form>
 
 <?php
