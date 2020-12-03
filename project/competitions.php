@@ -32,7 +32,7 @@ if (isset($_POST["join"])) {
 				$r = $stmt->execute([":compID" => $_POST["compID"], ":user_id" => get_user_id()]);
 				
 				if ($r) {
-                    flash("Successfully join competition", "success");
+                    flash("Successfully joined competition!", "success");
                     die(header("Location: #"));
                 }
 			

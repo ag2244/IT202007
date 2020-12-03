@@ -51,24 +51,20 @@ require_once(__DIR__ . "/../lib/helpers.php");
 			   aria-haspopup="true" aria-expanded="false">
 				Admin
 			</a>
+
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-				<a class="nav-link" href="<?php echo getURL("test/test_create_scores.php"); ?>">Create Score Entry</a>
+			
+				<a class="dropdown-item" href="<?php echo getURL("test/test_create_scores.php"); ?>">Create Score Entry</a>
 				
-				<a class="nav-link" href="<?php echo getURL("test/test_list_scores.php"); ?>">View Score Entries</a>
+				<a class="dropdown-item" href="<?php echo getURL("test/test_list_scores.php"); ?>">View Score Entries</a>
 					
-				<a class="nav-link" href="<?php echo getURL("test/test_create_pointshistory.php"); ?>">Create Points History Entry</a>
+				<a class="dropdown-item" href="<?php echo getURL("test/test_create_pointshistory.php"); ?>">Create Points History Entry</a>
 					
-				<a class="nav-link" href="<?php echo getURL("test/test_list_pointshistory.php"); ?>">View Points History Entries</a>
+				<a class="dropdown-item" href="<?php echo getURL("test/test_list_pointshistory.php"); ?>">View Points History Entries</a>
 			</div>
 		</li>
-
-		<!--
-		<li class="nav-item"><a class="nav-link" href="test/test_create_scores.php">Create Score Entry</a></li>
-		<li class="nav-item"><a class="nav-link" href="test/test_list_scores.php">View Score Entries</a></li>
-		<li class="nav-item"><a class="nav-link" href="test/test_create_pointshistory.php">Create Points History Entry</a></li>
-		<li class="nav-item"><a class="nav-link" href="test/test_list_pointshistory.php">View Points History Entries</a></li>
-		-->
 	<?php endif; ?>
+	
 </ul>
 </nav>
 <br>

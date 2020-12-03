@@ -55,7 +55,7 @@ if (isset($_POST["login"])) {
 		
 		if (isset($db)) {
 			//prepared statement means: SELECT the email and password from at most 1 entry where email is equal to :email placeholder.
-			$stmt = $db->prepare("SELECT id, email, username, password from Users WHERE email = :email LIMIT 1");
+			$stmt = $db->prepare("SELECT id, email, username, password, lifetimePoints from Users WHERE email = :email LIMIT 1");
 			
 			$params = array(":email" => $email);
 			$r = $stmt->execute($params);
@@ -91,6 +91,7 @@ if (isset($_POST["login"])) {
 					else {
 						$_SESSION["user"]["roles"] = [];
 					}
+					
 					//on successful login let's serve-side redirect the user to the home page.
 					header("Location: home.php");
 				}
