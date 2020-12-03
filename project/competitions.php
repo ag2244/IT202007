@@ -28,15 +28,15 @@ if (isset($_POST["join"])) {
 			
 			if ($lifetimePoints >= $fee) {
 				
-				//$stmt = $db->prepare("INSERT INTO Competitions (competition_id, user_id) VALUES(:compID, :user_id)");
-				//$r = $stmt->execute([":compID" => $_POST["compID"], ":user_id" = get_user_id()]);
-				/*
+				$stmt = $db->prepare("INSERT INTO CompetitionParticipants (comp_id, user_id) VALUES(:compID, :user_id)");
+				$r = $stmt->execute([":compID" => $_POST["compID"], ":user_id" => get_user_id()]);
+				
 				if ($r) {
                     flash("Successfully join competition", "success");
-                    die(header("Location: home.php"));
+                    die(header("Location: #"));
                 }
 			
-				else {flash("There was a problem joining the competition: " . var_export($stmt->errorInfo(), true), "danger");}*/
+				else {flash("There was a problem joining the competition: " . var_export($stmt->errorInfo(), true), "danger");}
 				
 			}
 			
@@ -120,6 +120,7 @@ else { flash("There was a problem looking up competitions: " . var_export($stmt-
                             <div class="col">
                                 <?php if ($r["reg"] != get_user_id()): ?>
                                     <form method="POST">
+									
                                         <input type="hidden" name="compID" value="<?php safer_echo($r["id"]); ?>"/>
                                         <input type="submit" name="join" class="btn btn-primary"
                                                value="Join (Cost: <?php safer_echo($r["fee"]); ?>)"/>

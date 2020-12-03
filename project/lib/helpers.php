@@ -98,7 +98,7 @@ function getLifetimePoints() {
 	if (is_logged_in() && isset($_SESSION["user"]["lifetimePoints"])) {
         return $_SESSION["user"]["lifetimePoints"];
     }
-	return "asd";
+	return -1;
 }
 
 function safer_echo($var) {
