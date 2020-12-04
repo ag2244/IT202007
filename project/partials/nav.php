@@ -35,6 +35,8 @@ require_once(__DIR__ . "/../lib/helpers.php");
 	<!-- If logged in, put a logout button -->
 	<?php if(is_logged_in()):?>
 		
+		<li class="nav-item"><a class="nav-link" href="<?php echo getURL("myScores.php"); ?>">My Scores</a></li>
+		
 		<li class="nav-item"><a class="nav-link" href="<?php echo getURL("competitions.php"); ?>">Competitions</a></li>
 	
 		<li class="nav-item"><a class="nav-link" href="<?php echo getURL("makeCompetition.php"); ?>">Start a Competition</a></li>

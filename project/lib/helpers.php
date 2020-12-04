@@ -7,7 +7,7 @@ function getTopLifetime() {
 	$userID = get_user_id();
 	$db = getDB();
 	
-	$stmt = $db->prepare("SELECT created, score FROM Scores WHERE user_id = :user_id ORDER BY score DESC LIMIT 10");
+	$stmt = $db->prepare("SELECT created, score FROM Scores WHERE user_id = :user_id ORDER BY score DESC");
 	$stmt->execute([ ":user_id" => $userID ]);
 	$topScores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	
@@ -23,7 +23,7 @@ function getTopWeekly() {
 	
 	$lastWeek = date("Y-m-d H:i:s", strtotime("-7 days"));
 	
-	$stmt = $db->prepare("SELECT created, score FROM Scores WHERE user_id = :user_id AND created >= :lastWeek ORDER BY score DESC LIMIT 10");
+	$stmt = $db->prepare("SELECT created, score FROM Scores WHERE user_id = :user_id AND created >= :lastWeek ORDER BY score DESC");
 	$stmt->execute([
 		":user_id" => $userID,
 		":lastWeek" => $lastWeek
@@ -43,7 +43,7 @@ function getTopMonthly() {
 	
 	$lastMonth = date("Y-m-d H:i:s", strtotime("-30 days"));
 	
-	$stmt = $db->prepare("SELECT created, score FROM Scores WHERE user_id = :user_id AND created >= :lastMonth ORDER BY score DESC LIMIT 10");
+	$stmt = $db->prepare("SELECT created, score FROM Scores WHERE user_id = :user_id AND created >= :lastMonth ORDER BY score DESC");
 	$stmt->execute([
 		":user_id" => $userID,
 		":lastMonth" => $lastMonth
