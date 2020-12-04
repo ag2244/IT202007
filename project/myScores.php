@@ -38,7 +38,7 @@ if($result){
 $total_pages = ceil($total / $per_page);
 $offset = ($page-1) * $per_page; //List offset for list of score entries
 
-$stmt = $db->prepare("SELECT * FROM Scores WHERE user_id = :id LIMIT :offset, :count");
+$stmt = $db->prepare("SELECT * FROM Scores WHERE user_id = :id ORDER BY created DESC LIMIT :offset, :count");
 //LIMIT basically means the slice of the query's results we want
 //need to use bindValue to tell PDO to create these as ints
 //otherwise it fails when being converted to strings (the default behavior)
