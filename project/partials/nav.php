@@ -70,3 +70,5 @@ require_once(__DIR__ . "/../lib/helpers.php");
 </ul>
 </nav>
 <br>
+
+<div class="container-fluid">
