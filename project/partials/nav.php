@@ -22,7 +22,7 @@ require_once(__DIR__ . "/../lib/helpers.php");
 	<!-- Navigate to Home (home.php) button -->
 	<li class="nav-item"><a class="nav-link" href="<?php echo getURL("home.php");?>">Home</a></li>
 	
-	<li class="nav-item"><a class="nav-link" href="<?php echo getURL("asteroids_prototype.php");?>">Asteroids Prototype</a></li>
+	<li class="nav-item"><a class="nav-link" href="<?php echo getURL("spaceRocks.php");?>">Space Rocks Game</a></li>
 	
 	<!-- If not logged in, put a log in and register button -->
 	<?php if(!is_logged_in()):?>

@@ -1,14 +1,6 @@
-<?php require_once(__DIR__ . "/partials/nav.php"); ?>
-<?php
-/*
-if (!is_logged_in()) {
-    //this will redirect to login and kill the rest of this script (prevent it from executing)
-    flash("You must be logged in to access this page");
-    die(header("Location: login.php"));
-}
-*/
-?>
-
+<!DOCTYPE html>
+<html>
+<head>
 <script>
 
 var canvas;
@@ -17,16 +9,19 @@ var context;
 var loop;
 
 var player;
-var rightPaddle;
-var paddleWidth = 25;
-var paddleHeight = 100;
-var paddleSpeed = 2;
+var acceleration = 0.2;
+var topSpeed = 5;
+
+var maxRockSize = 75;
+var minRockSize = 50;
+var rockThickness = 5;
+var rockStages = 2;
+var rockSpeed = 1;
 
 var bulletSize = 5;
 var bulletSpeed = 7.5;
 
-var drawables = [];
-
+var rocks = [];
 var bullets = [];
 
 var hits = 0;
@@ -64,15 +59,13 @@ function init() {
 	if (canvas.getContext) {
 		context = canvas.getContext("2d");
 		
-		//Make the paddles on the screen
-		player = makeRect(25, canvas.height / 2 - paddleHeight / 2, paddleWidth, paddleHeight, 5, '#BC0000');
-		rightPaddle = makeRect(canvas.width - paddleWidth - 25, canvas.height / 2 - paddleHeight / 2, paddleWidth, paddleHeight, 5, '#0000BC');
+		//Make the player on the screen
+		player = makeRect(canvas.width / 2 - 25, canvas.height / 2 - 25 / 2, 25, 25, '#FFFFFF');
 		
-		//put drawable objects into drawable array
-		drawables.push(player);
-		drawables.push(rightPaddle);
-		
-		console.log(drawables);		
+		//Spawn rocks in the game
+		for (i = 0; i < 4; i++) {
+		  spawnRock();
+		}
 		
 		//Put ball in the middle, start first match
 		attachKeyListeners();
@@ -81,6 +74,76 @@ function init() {
 		canvas.focus();
 		
 	}
+}
+
+function spawnRock() {
+	
+	let coords = [0, 0];
+	
+	let rockVelocity = [rockSpeed, rockSpeed];
+	
+	//Randomly picks which side of the canvas a rock will be spawned.
+	//0: x = 0, 1: x = canvas.width, 2: y = 0, 3: y = canvas.height;
+	let canvasSide = Math.floor(Math.random() * 4);
+	
+	switch(canvasSide) {
+	
+		case 0:
+		coords = [0 - maxRockSize, Math.random() * canvas.height];
+		rockVelocity = [rockSpeed, (Math.random() * rockSpeed * 2) - rockSpeed];
+		break;
+		
+		case 1:
+		coords = [canvas.width + maxRockSize, Math.random() * canvas.height];
+		rockVelocity = [rockSpeed * -1, (Math.random() * rockSpeed * 2) - rockSpeed];
+		break;
+		
+		case 2:
+		coords = [Math.random() * canvas.width, 0 - maxRockSize];
+		rockVelocity = [(Math.random() * rockSpeed * 2) - rockSpeed, rockSpeed];
+		break;
+		
+		case 3:
+		coords = [Math.random() * canvas.width, canvas.height + maxRockSize];
+		rockVelocity = [(Math.random() * rockSpeed * 2) - rockSpeed, rockSpeed * -1];
+		break;
+	}
+	
+	let rockSize = (Math.random() * (maxRockSize - minRockSize)) + minRockSize
+	
+	let newRock = makeOutlinedRect(coords[0], coords[1], rockSize, rockSize, rockThickness, rockVelocity[0], rockVelocity[1]);
+	newRock.stage = rockStages;
+	
+	console.log(newRock.stage);
+	
+	rocks.push(newRock);
+	
+}
+
+function splitRock(rock) {
+	
+	if (rock.stage > 0) {
+		
+		for (let i = 0; i < 2; i++) {
+			
+			let newRock = makeOutlinedRect(
+				rock.x, 
+				rock.y, 
+				rock.w/1.25, 
+				rock.h/1.25, 
+				rockThickness, 
+				((Math.random() * rockSpeed * 2) - rockSpeed) * 2, 
+				((Math.random() * rockSpeed * 2) - rockSpeed) * 2
+			);
+			
+			newRock.stage = rock.stage - 1;
+			
+			rocks.push(newRock);
+		}
+	}
+	
+	else { spawnRock(); }
+
 }
 
 function attachKeyListeners() {
@@ -136,7 +199,7 @@ function attachKeyListeners() {
 }
 
 //Create rectangle object
-function makeRect(x, y, width, height, speed, color) {
+function makeRect(x, y, width, height, color) {
 
 	if (!color) color = '#000000';
 	
@@ -144,9 +207,10 @@ function makeRect(x, y, width, height, speed, color) {
 	return {
 		x: x,
 		y: y,
+		sX: 0,
+		sY: 0,
 		w: width,
 		h: height,
-		s: speed,
 		c: color,
 		draw: function () {
 			context.fillStyle = this.c;
@@ -155,16 +219,47 @@ function makeRect(x, y, width, height, speed, color) {
 	};
 }
 
+function makeOutlinedRect(x, y, width, height, thickness, sX, sY, outlineColor, fillColor) {
+
+	if (!outlineColor) outlineColor = '#FFFFFF';
+	if (!fillColor) fillColor = '#000000';
+	
+	//Associative array with a function that draws a rectangle based on the stored information
+	return {
+		x: x,
+		y: y,
+		sX: sX,
+		sY: sY,
+		w: width,
+		h: height,
+		t: thickness,
+		cO: outlineColor,
+		cF: fillColor,
+		draw: function () {
+			context.fillStyle = this.cO;
+			context.fillRect(this.x, this.y, this.w, this.h);
+			
+			context.fillStyle = this.cF;
+			context.fillRect(this.x + this.t, this.y + this.t, this.w - this.t*2, this.h - this.t*2)
+			
+		},
+		move: function () {
+			this.x += this.sX;
+			this.y += this.sY;
+		}
+	};
+}
+
 function movePaddle() {
-	if (keys.W) { player.y -= player.s; }
+	if (keys.W) { player.sY = Math.max(player.sY - 0.2, topSpeed * -1); }
 
-	if (keys.S) { player.y += player.s; }
+	if (keys.S) { player.sY = Math.min(player.sY + 0.2, topSpeed); }
 	
-	if (keys.A) { player.x -= player.s; }
+	if (keys.A) { player.sX = Math.max(player.sX - 0.2, topSpeed * -1); }
 	
-	if (keys.D) { player.x += player.s; }
+	if (keys.D) { player.sX = Math.min(player.sX + 0.2, topSpeed); }
 
-	clampToCanvas(player);
+	lapOverCanvas(player);
 }
 
 function checkShootBullet() {
@@ -182,7 +277,7 @@ function checkShootBullet() {
 	
 	if ((x != 0 || y != 0) && bulletTimer == 0) {
 		
-		let newBullet = makeRect(player.x + (player.w/2), player.y + (player.h/2), bulletSize, bulletSize, bulletSpeed, '#000000');
+		let newBullet = makeRect(player.x + (player.w/2), player.y + (player.h/2), bulletSize, bulletSize, bulletSpeed, '#FFFFFF');
 		
 		newBullet.sX = x * bulletSpeed;
 		newBullet.sY = y * bulletSpeed;
@@ -199,31 +294,28 @@ function moveBullet(bullet, bulletIndex) {
 	bullet.x += bullet.sX;
 	bullet.y += bullet.sY;
 
-	// Bounce the ball off the top/bottom
-	if (bullet.y + bullet.h < 0 || bullet.y > canvas.height) {
-		bullets.splice(bulletIndex, 1);
-	}
-	
-	if (bullet.x + bullet.w < 0 || bullet.x > canvas.width) {
-		bullets.splice(bulletIndex, 1);
-	}
-
 }
 
-//Make sure a paddle doesnt exit the canvas
-function clampToCanvas(paddle) {
-    if (paddle.y < 0) {
-        paddle.y = 0;
+function moveObj(obj) {
+	
+	player.x += player.sX;
+	player.y += player.sY;
+	
+}
+
+function lapOverCanvas(object) {
+    if (object.y + object.h < 0) {
+        object.y = canvas.height;
     }
-    if (paddle.y + paddle.h > canvas.height) {
-        paddle.y = canvas.height - paddle.h;
+    if (object.y > canvas.height) {
+        object.y = 0 - object.h;
     }
 	
-	if (paddle.x < 0) {
-        paddle.x = 0;
+	if (object.x + object.w < 0) {
+        object.x = canvas.width;
     }
-    if (paddle.x + paddle.w > canvas.width) {
-        paddle.x = canvas.width - paddle.w;
+    if (object.x > canvas.width) {
+        object.x = 0 - object.w;
     }
 }
 
@@ -249,48 +341,54 @@ function checkHit(bullet, target) {
 
 function drawScore() {
 	// Draw the scores
-	context.fillStyle = '#000000';
+	context.fillStyle = '#FFFFFF';
 	context.font = '24px Arial';
 	context.textAlign = 'center';
 	context.fillText('Hits: ' + hits, canvas.width/2, canvas.height - 24);
 	
 }
 
-function checkCollision() {
+function leftScreen(object) {
+
+	if (object.y + object.h < 0 || object.y > canvas.height) {
+		return true;
+	}
+	
+	if (object.x + object.w < 0 || object.x > canvas.width) {
+		return true;
+	}
+	
+	return false;
+}
+
+function checkCollision(obj0, obj1) {
     
 	let collided = true;
 	
 	//rectangle y + h = bottom side of the rectangle
 	
 	//Is ball or right paddle on left side of the other?
-    if ((player.x >= (rightPaddle.x + rightPaddle.w)) || (rightPaddle.x >= (player.x + player.w))) {
+    if ((obj0.x >= (obj1.x + obj1.w)) || (obj1.x >= (obj0.x + obj0.w))) {
         collided = false;
     }
 	
 	//Is ball or right paddle below the other?
-	if (((player.y + player.h) <= rightPaddle.y) || ((rightPaddle.y + rightPaddle.h) <= player.y)) {
+	if (((obj0.y + obj0.h) <= obj1.y) || ((obj1.y + obj1.h) <= obj0.y)) {
         collided = false;
     }
-	
-	/*if (collided) {
-	
-		context.fillStyle = '#000000';
-		context.font = '24px Arial';
-		context.textAlign = 'center';
-		context.fillText('Two paddles have collided!', canvas.width/2, 24);
-	
-	}*/
 	
 	return collided;
 }
 
 function erase() {
-	context.fillStyle = '#FFFFFF';
+	context.fillStyle = '#000000';
 	context.fillRect(0, 0, canvas.width, canvas.height);
 }
 
 function sendScore() {
-
+	alert("DEBUG!\nFINAL SCORE: " + hits);
+	location.reload();
+	/*
 	let xhttp = new XMLHttpRequest();
 	
 	xhttp.onreadystatechange = function () {
@@ -315,11 +413,12 @@ function sendScore() {
 	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	//map any key/value data similar to query params
 	xhttp.send("score=" + hits + "&gameName=AsteroidsPrototype");
+	*/
 	
 }
 
 function checkDied() {
-
+	/*
 	if (checkCollision()) {
 	
 		clearInterval(loop);
@@ -328,7 +427,7 @@ function checkDied() {
 		
 		sendScore();
 		
-	}
+	} */
 
 }
 
@@ -337,9 +436,7 @@ function gameLoop() {
 	movePaddle();
 	
 	//draw stuff
-	for (let i = 0; i < drawables.length; i++) {
-		drawables[i].draw();
-	}
+	player.draw();
 	
 	checkShootBullet();
 	
@@ -347,14 +444,43 @@ function gameLoop() {
 	
 	for (let i = 0; i < bullets.length; i++) {
 		moveBullet(bullets[i], i);
+		bullets[i].draw();
 		
-		if (checkHit(bullets[i], rightPaddle)) {
+		if (leftScreen(bullets[i])) {
 			//destroy bullet
 			bullets.splice(i, 1);
 		}
-		
-		else { bullets[i].draw(); }
 	}
+	
+	for (let i = 0; i < rocks.length; i++) {
+		rocks[i].move();
+		rocks[i].draw();
+		
+		lapOverCanvas(rocks[i]);
+		
+		if (checkCollision(rocks[i], player)) {
+		
+			clearInterval(loop);
+			sendScore();
+			
+		}
+		
+		for (let j = 0; j < bullets.length; j++) {
+			
+			if (checkHit(bullets[j], rocks[i])) {
+				//destroy bullet
+				bullets.splice(j, 1);
+				
+				splitRock(rocks[i]);
+				
+				hitRock = rocks.splice(i, 1);
+				
+			}
+			
+		}
+	} 
+	
+	moveObj(player);
 	
 	drawScore()
 	
@@ -362,7 +488,7 @@ function gameLoop() {
 }
 
 </script>
-<html>
+</head>
 <body onload = "init();">
 	<main>
 		<canvas id="board" width="600px" height="600px" style="border: 1px solid black;"> </canvas>

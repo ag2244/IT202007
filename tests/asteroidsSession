@@ -1,0 +1,24 @@
+<NotepadPlus>
+    <Session activeView="0">
+        <mainView activeIndex="0">
+            <File firstVisibleLine="321" xOffset="0" scrollWidth="1656" startPos="2964" endPos="2964" selMode="0" offset="0" wrapCount="1" lang="HTML" encoding="-1" userReadOnly="no" filename="D:\Programs\IT202\IT202_git_repo\tests\asteroids.html" backupFilePath="" originalFileLastModifTimestamp="-296339968" originalFileLastModifTimestampHigh="30853982" mapFirstVisibleDisplayLine="-1" mapFirstVisibleDocLine="-1" mapLastVisibleDocLine="-1" mapNbLine="-1" mapHigherPos="-1" mapWidth="-1" mapHeight="-1" mapKByteInDoc="7" mapWrapIndentMode="-1" mapIsWrap="no">
+                <Fold line="55" />
+                <Fold line="148" />
+                <Fold line="201" />
+                <Fold line="221" />
+                <Fold line="252" />
+                <Fold line="264" />
+                <Fold line="291" />
+                <Fold line="298" />
+                <Fold line="305" />
+                <Fold line="321" />
+                <Fold line="341" />
+                <Fold line="350" />
+                <Fold line="363" />
+                <Fold line="382" />
+                <Fold line="387" />
+            </File>
+        </mainView>
+        <subView activeIndex="0" />
+    </Session>
+</NotepadPlus>
