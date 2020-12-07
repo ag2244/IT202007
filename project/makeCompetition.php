@@ -117,9 +117,7 @@ if(isset($_POST["newComp"])){
 		
 			flash("Created competition successfully with id: \"" . $db->lastInsertId() . "\"" ); 
 		
-			$stmt = $db->prepare("UPDATE Users SET lifetimePoints = 
-					:newVal
-					WHERE id = :id");
+			$stmt = $db->prepare("UPDATE Users SET lifetimePoints = :newVal WHERE id = :id");
 				
 			$rLifetimePoints = $stmt->execute([ ":id"=>$user, ":newVal"=>getLifetimePoints() - $cost ]);
 			
