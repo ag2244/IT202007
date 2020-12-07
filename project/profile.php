@@ -175,11 +175,41 @@ if (isset($_POST["saved"])) {
 <br>
 
 <form method="POST">
+	<div class="form-group">
+		<label for="email">Email</label>
+		<input class="form-group" type="email" name="email" value="<?php safer_echo(get_email()); ?>"/>
+	</div>
+	
+	<div class="form-group">
+		<label for="username">Username</label>
+		<input class="form-group" type="text" maxlength="60" name="username" value="<?php safer_echo(get_username()); ?>"/>
+	</div>
+	
+	<div class="form-group">
+		<label for="currpw">Current Password</label>
+		<input class="form-group" type="password" name="current"/>
+	</div>
+	
+	<div class="form-group">
+		<label for="pw">New Password</label>
+		<input class="form-group" type="password" name="password"/>
+	</div>
+	
+	<div class="form-group">
+		<label for="cpw">Confirm New Password</label>
+		<input class="form-group" type="password" name="confirm"/>
+	</div>
+	
+    <input class="form-control" type="submit" name="saved" value="Save Profile"/>
+</form>
+
+<!--
+
+<form method="POST">
     <label for="email">Email</label>
-    <input type="email" name="email" value="<?php safer_echo(get_email()); ?>"/>
+    <input type="email" name="email" value="< ?php safer_echo(get_email()); ?>"/>
     <label for="username">Username</label>
-    <input type="text" maxlength="60" name="username" value="<?php safer_echo(get_username()); ?>"/>
-    <!-- DO NOT PRELOAD PASSWORD-->
+    <input type="text" maxlength="60" name="username" value="< ?php safer_echo(get_username()); ?>"/>
 	<label for="currpw">Current Password</label>
     <input type="password" name="current"/>
     <label for="pw">Password</label>
@@ -188,3 +218,5 @@ if (isset($_POST["saved"])) {
     <input type="password" name="confirm"/>
     <input type="submit" name="saved" value="Save Profile"/>
 </form>
+
+-->

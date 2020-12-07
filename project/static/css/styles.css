@@ -38,7 +38,11 @@ ul[class="nav"]{
     text-decoration:underline;
 }
 
-/* REST: uses nth-of-type to target specific indexes of elements (poor waterfall effect) */
+.px-2 {
+  padding-left: ($spacer * .5) !important;
+  padding-right: ($spacer * .5) !important;
+}
+
 input, select {
     width: 100%;
     background: #8ca5bd;

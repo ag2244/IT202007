@@ -2,7 +2,9 @@
 //since API is 100% server, we won't include navbar or flash
 require_once(__DIR__ . "/../lib/helpers.php");
 if (!is_logged_in()) {
-    die(header(':', true, 403));
+	$response = ["status" => 403, "error" => "NOT LOGGED IN"];
+	echo json_encode($response);
+	die();
 }
 
 /*

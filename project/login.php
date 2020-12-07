@@ -4,16 +4,26 @@
 <?php require_once(__DIR__ . "/partials/nav.php"); ?>
 
 <form method="POST">
-  <label for="email">Email:</label>
-  <input type="email" id="email" name="email" />
-  
-  <label for="username">Username:</label>
-  <input type="username" id="username" name="username" />
-  
-  <label for="p1">Password:</label>
-  <input type="password" id="p1" name="password" required/>
-  <!-- input of submit has value "Login": meaning the submitted form's data has the value of "Login" -->
-  <input type="submit" name="login" value="Login"/> 
+	<div class="form-group">
+		<label for="email">Email:</label>
+		<br>
+		<input class="form-group" type="email" id="email" name="email" />
+	</div>
+
+	<div class="form-group">
+		<label for="username">Username:</label>
+		<br>
+		<input class="form-group" type="username" id="username" name="username" />
+	</div>
+
+	<div class="form-group">
+		<label for="p1">Password:</label>
+		<br>
+		<input class="form-group" type="password" id="p1" name="password" required/>
+	</div>
+		
+	<!-- input of submit has value "Login": meaning the submitted form's data has the value of "Login" -->
+	<input class="form-control" type="submit" name="login" value="Login"/> 
 </form>
 
 <?php
@@ -48,7 +58,7 @@ if (isset($_POST["login"])) {
 		
 		if (isset($db)) {
 			//prepared statement means: SELECT the email and password from at most 1 entry where email is equal to :email placeholder.
-			$stmt = $db->prepare("SELECT id, email, username, password from Users WHERE email = :email LIMIT 1");
+			$stmt = $db->prepare("SELECT id, email, username, password, lifetimePoints from Users WHERE email = :email LIMIT 1");
 			
 			$params = array(":email" => $email);
 			$r = $stmt->execute($params);
@@ -84,6 +94,7 @@ if (isset($_POST["login"])) {
 					else {
 						$_SESSION["user"]["roles"] = [];
 					}
+					
 					//on successful login let's serve-side redirect the user to the home page.
 					header("Location: home.php");
 				}

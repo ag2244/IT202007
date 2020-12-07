@@ -3,11 +3,12 @@
 CREATE TABLE IF NOT EXISTS `Competitions` (
 	`id` INT NOT NULL AUTO_INCREMENT
 	, `name` VARCHAR(100) NOT NULL
-	, `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+	, `created` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 	
-	, `duration` INT NOT NULL /* Duration in days */
-	, `expires` TIMESTAMP NOT NULL
+	, `duration` INT DEFAULT 3 /* Duration in days */
+	, `expires` TIMESTAMP
 	
+	, `cost` INT DEFAULT 1 /* total spent to create (base price [1] + reward) */
 	, `reward` INT NOT NULL
 	
 	, `participants` INT NOT NULL DEFAULT 0/* Number of participants */
@@ -21,17 +22,20 @@ CREATE TABLE IF NOT EXISTS `Competitions` (
 	, `third_place_per` FLOAT NOT NULL
 	
 	, `fee` INT NOT NULL DEFAULT 0
+	, `user_id` INT
 	
 	, PRIMARY KEY (`id`)
+	, FOREIGN KEY (`user_id`) REFERENCES `Users`(`id`)
 	);
 
 /* Will need an association table CompetitionParticipants (id, comp_id, user_id, created): Comp_id and user_id should be a composite unique key (user can only join a competition once) */
 
-CREATE TABLE IF NOT EXISTS `Competition Participants` (
+CREATE TABLE IF NOT EXISTS `CompetitionParticipants` (
 	`id` INT NOT NULL AUTO_INCREMENT
 	, `comp_id` INT NOT NULL
 	, `user_id` INT NOT NULL
 	, `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+	, `modified`   TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 	
 	, PRIMARY KEY (`id`)
 	, FOREIGN KEY (`comp_id`) REFERENCES `Competitions`(`id`)
