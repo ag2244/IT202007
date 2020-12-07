@@ -130,48 +130,60 @@ if (isset($_POST["saved"])) {
 }
 ?>
 
-<p>
-	<h>
-		<b>LIFETIME SCORES:</b>
-	</h>
-</p>
-
-<?php
-
-
-	$topLifetime = getTopLifetime();
-
-	$scoreTable = '<table border="1" cellspacing="0" cellpadding="2"><tr>';
-
-	$scoreTable .= '<th>Personal Ranking</th><th>Score</th><th>Date of Creation</th>';
-
-	$ranking = 1;
-
-	foreach($topLifetime as &$scoreInfo) {
-		
-		$scoreTable .= '<tr>';
-		
-		$scoreTable .= 
-			'<td>'
-			. $ranking
-			. '</td><td>'
-			. $scoreInfo["score"]
-			. '</td><td>'
-			. $scoreInfo["created"]
-			. '</td>';
-		
-		$scoreTable .= '</tr>';
-		
-		$ranking++;
-		
-	}
-
-	$scoreTable .= '</table>'; 
-
-	echo $scoreTable;
-
+<?php 
+$topLifetime = getTopLifetime(); 
+$ranking = 1;
 ?>
 
+<br>
+
+<div class="container-fluid">
+	<h3>Scores</h3>
+	<div class="list-group">
+		<?php if (isset($topLifetime) && count($topLifetime)): ?>
+			<div class="list-group-item font-weight-bold">
+				<div class="row">
+					<div class="col">
+						Ranking
+					</div>
+					<div class="col">
+						Score
+					</div>
+					<div class="col">
+						Date
+					</div>
+				</div>
+			</div>
+			
+			<?php foreach ($topLifetime as $score): ?>
+				
+				<div class="list-group-item">
+				
+					<div class="row">
+						<div class="col">
+							<?php safer_echo($ranking); $ranking++; ?>
+						</div>
+						
+						<div class="col">
+							<?php safer_echo($score["score"]); ?>
+						</div>
+						
+						<div class="col">
+							<?php safer_echo($score["created"]); ?>
+						</div>
+						
+					</div>
+				</div>
+				
+			<?php endforeach; ?>
+		<?php else: ?>
+			<div class="list-group-item">
+				You have no scores!
+			</div>
+		<?php endif; ?>
+	</div>
+</div>
+	
 <br>
 
 <form method="POST">
