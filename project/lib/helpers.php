@@ -48,7 +48,7 @@ function getTopMonthly() {
 		":user_id" => $userID,
 		":lastMonth" => $lastMonth
 		]);
-	$topScores["monthly"] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	$topScores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	
 	if (!$topScores) {return "No scores available";}
 	
