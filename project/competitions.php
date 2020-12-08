@@ -49,6 +49,10 @@ if (isset($_POST["join"])) {
 						":reason"=>"Joined Competition with ID " . (string)$db->lastInsertId()
 					]);
 					
+					$stmt = $db->prepare("UPDATE Competitions SET reward = reward + :newAdd WHERE id = :compID");
+				
+					$stmt->execute([":compID" => $_POST["compID"], ":newAdd" = max(1, floor($fee/2))]);
+					
                     die(header("Location: #"));
                 }
 			
