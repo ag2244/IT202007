@@ -36,6 +36,19 @@ if (isset($_POST["join"])) {
 				
 				if ($rParticipants && $rCompetitions) {
                     flash("Successfully joined competition!", "success");
+					
+					$stmt = $db->prepare("UPDATE Users SET lifetimePoints = :newVal WHERE id = :id");
+				
+					$rLifetimePoints = $stmt->execute([ ":id"=>$user, ":newVal"=>getLifetimePoints() - $fee]);
+					
+					$stmt = $db->prepare("INSERT INTO PointsHistory (user_id, points_change, reason) VALUES(:user_id, :points_change, :reason)");
+
+					$rPointsHistory = $stmt->execute([
+						":user_id"=>$user,
+						":points_change"=>$cost,
+						":reason"=>"Joined Competition with ID " . (string)$db->lastInsertId()
+					]);
+					
                     die(header("Location: #"));
                 }
 			

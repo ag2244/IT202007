@@ -63,6 +63,8 @@ require_once(__DIR__ . "/../lib/helpers.php");
 				<a class="dropdown-item" href="<?php echo getURL("test/test_create_pointshistory.php"); ?>">Create Points History Entry</a>
 					
 				<a class="dropdown-item" href="<?php echo getURL("test/test_list_pointshistory.php"); ?>">View Points History Entries</a>
+				
+				<a class="dropdown-item" href="<?php echo getURL("test/test_get_winners.php"); ?>">Test Competition Payout</a>
 			</div>
 		</li>
 	<?php endif; ?>

@@ -126,7 +126,7 @@ if(isset($_POST["newComp"])){
 			$rPointsHistory = $stmt->execute([
 				":user_id"=>$user,
 				":points_change"=>$cost,
-				":reason"=>"Created Competition with ID" . (string)$db->lastInsertId()
+				":reason"=>"Created Competition with ID " . (string)$db->lastInsertId()
 			]);
 			
 		}
