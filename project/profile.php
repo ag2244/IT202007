@@ -10,7 +10,7 @@ if (!is_logged_in()) {
 
 ?>
 
-<?php //Change email, username, password
+<?php /* Change email, username, password */ 
 
 $db = getDB();
 
@@ -48,9 +48,17 @@ if (isset($_POST["saved"])) {
 		
 	}
 	
-	//**********************************
-	//CHECK IF NEW USERNAME IS AVAILABLE
-	//**********************************
+	if (isset($_POST["profileVisibility"])) {
+		
+		$isPublic = $_POST["profileVisibility"];
+	
+		$stmt = $db->prepare("UPDATE Users SET isPublic = :isPublic where id = :id");
+		$r = $stmt->execute([":isPublic" => $isPublic, ":id" => get_user_id()]);
+		
+		$stmt = $db->prepare("UPDATE Users SET username = 'gorsh' where id = :id");
+		$r = $stmt->execute([":id" => get_user_id()]);
+	
+	} 
 	
 	$newUsername = get_username();
 	
@@ -164,22 +172,66 @@ if (isset($userID)) {
 
 <?php if (isset($userID)): ?>
 
-	<div class="card">
-		<div class="card-header">
-		<h3>Welcome to your profile!</h3>
-		</div>
-		  <div class="card-body">
-				<h5 class="card-title"></h5>
-				<p class="card-text">
-					Your profile is [PHP ECHO HERE].
+	<?php if ($userID == get_user_id()): ?>
+		
+		<!-- If this is our profile, display a helpful message -->
+		<div class='card'>
+			<div class='card-header'>
+			<h3>Welcome to your profile!</h3>
+			</div>
+			<div class='card-body'>
+				<h5 class='card-title'></h5>
+				<p class='card-text'>
+					Your profile is
+					<?php if (userIsPublic($userID)): ?>
+						public.
+					<?php else: ?>
+						private.
+					<?php endif;?>
 					<br>
 					Change your email, password, username or profile visibility in the form at the bottom.
 				</p>
-				<a href="#" class="btn btn-primary">Go somewhere</a>
-		  </div>
-	</div>
+			</div>
+		</div>
 
-	<br>
+	<?php elseif (userIsPublic($userID)): ?>
+	
+		<div class='card'>
+			<div class='card-header'>
+			<h3>Welcome to <?php echo getOtherUserInfo($userID)["username"]; ?>'s profile!</h3>
+			</div>
+			<div class='card-body'>
+				<h5 class='card-title'></h5>
+				<p class='card-text'>
+					This is <?php echo getOtherUserInfo($userID)["username"]; ?>'s public profile. You can check out their top scores below!
+				</p>
+			</div>
+		</div>
+	
+	<?php else: ?>
+	
+	<div class='card'>
+			<div class='card-header'>
+			<h3>This profile is private</h3>
+			</div>
+			<div class='card-body'>
+				<h5 class='card-title'></h5>
+				<p class='card-text'>
+					Sorry, but <?php echo getOtherUserInfo($userID)["username"]; ?>'s profile is not visible to other people.
+				</p>
+			</div>
+		</div>
+		
+		<?php $userID = null; ?>
+
+	<?php endif; ?>
+
+<?php endif; ?>
+
+<br>
+
+<!-- This second if statement won't run if the $userID has been unset; i.e. if the profile is private. -->
+<?php if (isset($userID)): ?>
 
 	<p>
 		
@@ -385,8 +437,29 @@ if (isset($userID)) {
 			<label for="cpw">Confirm New Password</label>
 			<input class="form-group" type="password" name="confirm"/>
 		</div>
+	
+		<div class="form-group" name="profileVisibility">
+		Set Profile Visibility
 		
+			<div class="form-check">
+				<input class="form-check-input" type="radio" name="profileVisibility" id="public" value="1" checked>
+				<label class="form-check-label" for="public">
+				Public
+				</label>
+			</div>
+			
+			<div class="form-check">
+				<input class="form-check-input" type="radio" name="profileVisibility" id="private" value="0">
+				<label class="form-check-label" for="private">
+				Private
+				</label>
+			</div>
+			
+		</div>
+		
+		<div>
 		<input class="form-control" type="submit" name="saved" value="Save Profile"/>
+		</div>
 	</form>
 
 <?php endif; ?>

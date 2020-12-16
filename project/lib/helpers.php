@@ -124,6 +124,21 @@ function getProfileLink($userInfo) {
 	
 }
 
+function userIsPublic($userID) {
+
+	$db = getDB();
+	
+	$stmt = $db->prepare("SELECT isPublic FROM Users WHERE id = :user_id LIMIT 1");
+	$stmt->execute([
+		":user_id" => $userID
+		]);
+		
+	return (int)$stmt->fetch(PDO::FETCH_ASSOC)["isPublic"];
+	
+	
+	
+}
+
 function getTopLifetime($userID) {
 	
 	$db = getDB();
@@ -218,6 +233,23 @@ function getLifetimePoints() {
         return $_SESSION["user"]["lifetimePoints"];
     }
 	return -1;
+}
+
+function getOtherUserInfo($userID) {
+
+	$db = getDB();
+	
+	$stmt = $db->prepare("SELECT username, id, email, lifetimePoints FROM Users WHERE id = :user_id LIMIT 1");
+	$stmt->execute([
+		":user_id" => $userID
+		]);
+		
+	$user = $stmt->fetch(PDO::FETCH_ASSOC);
+	
+	if (!$user) {return null;}
+	
+	return $user;
+	
 }
 
 function safer_echo($var) {
