@@ -41,8 +41,7 @@ if (isset($_POST["register"])) {
             //here's the data map for the parameter to data
             $params = array(":email" => $email, ":username" => $username, ":password" => $hash);
             $r = $stmt->execute($params);
-            //let's just see what's returned
-            echo "db returned: " . var_export($r, true);
+			
             $e = $stmt->errorInfo();
             if ($e[0] == "00000") {
                 flash("<br>Welcome! You successfully registered, please login.");

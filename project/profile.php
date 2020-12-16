@@ -3,7 +3,10 @@
 require_once(__DIR__ . "/partials/nav.php"); 
 
 //Redirect to login and kill the rest of this script
-if (!is_logged_in()) { die( header("Location: login.php")); }
+if (!is_logged_in()) { 
+	flash("Log in to see other users' profiles!");
+	die( header("Location: login.php")); 
+	}
 
 ?>
 
@@ -146,8 +149,6 @@ if (!isset($userID)) {$userID = get_user_id();}
 
 if (isset($userID)) {
 	
-	echo "<h3><b>UserID " . $userID . "'s Profile!</b></h3>";
-	
 	$topLifetime = getTopLifetime($userID); 
 	$topMonthly = getTopMonthly($userID);
 	$topWeekly = getTopWeekly($userID);
@@ -155,12 +156,31 @@ if (isset($userID)) {
 	$rankingLife = 1;
 	$rankingMonth = 1;
 	$rankingWeek = 1;
-	}
+	
+}
 ?>
 
 <br>
 
 <?php if (isset($userID)): ?>
+
+	<div class="card">
+		<div class="card-header">
+		<h3>Welcome to your profile!</h3>
+		</div>
+		  <div class="card-body">
+				<h5 class="card-title"></h5>
+				<p class="card-text">
+					Your profile is [PHP ECHO HERE].
+					<br>
+					Change your email, password, username or profile visibility in the form at the bottom.
+				</p>
+				<a href="#" class="btn btn-primary">Go somewhere</a>
+		  </div>
+	</div>
+
+	<br>
+
 	<p>
 		
 	  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#topLifetime" aria-expanded="false" aria-controls="collapseExample">
