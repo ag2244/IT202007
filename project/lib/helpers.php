@@ -51,7 +51,7 @@ function endCompetition($compID) {
 				
 				//If we have found the top three scores with unique players, break the loop
 				if (sizeof($topThree) >= 3) { break; }
-			}
+			} 
 			
 			//Check if topThree has a size of 3 once more to make sure
 			//Then pay them out
@@ -92,36 +92,53 @@ function endCompetition($compID) {
 				
 			}
 			
-			set paid_out to 0
+			//set paid_out to 0
 			$stmt = $db->prepare("UPDATE Competitions SET paid_out = TRUE WHERE id = :id");
 			$stmt->execute([ ":id" => $compID ]);
 			
-			return $topThree;
+			return $topThree; 
 			
 		}
 	
 	}
 	
 	return "payoutFailed";
+} 
+
+function getProfileLink($userInfo) {
+	
+	if (isset($userInfo["id"]) && isset($userInfo["username"])) {
+		
+		echo join ('',
+		["<a href='",
+		getURL("profile.php"),
+		"?id=",
+		$userInfo["id"],
+		"'>",
+		$userInfo["username"],
+		""]
+		);
+	}
+	
+	else { flash ("UNABLE TO GET LINK"); }
+	
 }
 
-function getTopLifetime() {
+function getTopLifetime($userID) {
 	
-	$userID = get_user_id();
 	$db = getDB();
 	
 	$stmt = $db->prepare("SELECT created, score FROM Scores WHERE user_id = :user_id ORDER BY score DESC");
 	$stmt->execute([ ":user_id" => $userID ]);
 	$topScores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	
-	if (!$topScores) {return "No scores available";}
+	if (!$topScores) {return null;}
 	
 	return $topScores;
 }
 
-function getTopWeekly() {
+function getTopWeekly($userID) {
 	
-	$userID = get_user_id();
 	$db = getDB();
 	
 	$lastWeek = date("Y-m-d H:i:s", strtotime("-7 days"));
@@ -133,15 +150,14 @@ function getTopWeekly() {
 		]);
 	$topScores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	
-	if (!$topScores) {return "No scores available";}
+	if (!$topScores) {return null;}
 	
 	return $topScores;
 	
 }
 
-function getTopMonthly() {
+function getTopMonthly($userID) {
 
-	$userID = get_user_id();
 	$db = getDB();
 	
 	$lastMonth = date("Y-m-d H:i:s", strtotime("-30 days"));
@@ -153,7 +169,7 @@ function getTopMonthly() {
 		]);
 	$topScores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	
-	if (!$topScores) {return "No scores available";}
+	if (!$topScores) {return null;}
 	
 	return $topScores;
 	
@@ -240,6 +256,14 @@ function getURL($path) {
     return $_SERVER["CONTEXT_PREFIX"] . "/project/$path";
 }
 //end flash
+
+function test($param) {
+	
+	if (isset($param)) { return "YESPARAM"; }
+	
+	return "NOPARAM";
+	
+}
 
 ?>
 

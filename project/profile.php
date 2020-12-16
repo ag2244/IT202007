@@ -1,9 +1,13 @@
-<?php require_once(__DIR__ . "/partials/nav.php"); ?>
+<?php 
 
-<?php
+require_once(__DIR__ . "/partials/nav.php"); 
 
 //Redirect to login and kill the rest of this script
 if (!is_logged_in()) { die( header("Location: login.php")); }
+
+?>
+
+<?php //Change email, username, password
 
 $db = getDB();
 
@@ -130,217 +134,242 @@ if (isset($_POST["saved"])) {
 }
 ?>
 
-<?php 
-$topLifetime = getTopLifetime(); 
-$topMonthly = getTopMonthly();
-$topWeekly = getTopWeekly();
+<?php  //get user info and scores
 
-$rankingLife = 1;
-$rankingMonth = 1;
-$rankingWeek = 1;
+if (isset($_GET)) {
+	
+	if (isset($_GET["id"])) {$userID = $_GET["id"];}
+	
+}
+
+if (!isset($userID)) {$userID = get_user_id();}
+
+if (isset($userID)) {
+	
+	echo "<h3><b>UserID " . $userID . "'s Profile!</b></h3>";
+	
+	$topLifetime = getTopLifetime($userID); 
+	$topMonthly = getTopMonthly($userID);
+	$topWeekly = getTopWeekly($userID);
+
+	$rankingLife = 1;
+	$rankingMonth = 1;
+	$rankingWeek = 1;
+	}
 ?>
 
 <br>
 
-<p>
+<?php if (isset($userID)): ?>
+	<p>
+		
+	  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#topLifetime" aria-expanded="false" aria-controls="collapseExample">
+		Top Lifetime Scores
+	  </button>
+	  
+	  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#topMonthly" aria-expanded="false" aria-controls="collapseExample">
+		Top Monthly Scores
+	  </button>
+	  
+	  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#topWeekly" aria-expanded="false" aria-controls="collapseExample">
+		Top Weekly Scores
+	  </button>
+	  
+	</p>
 
-  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#topLifetime" aria-expanded="false" aria-controls="collapseExample">
-    Top Lifetime Scores
-  </button>
-  
-  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#topMonthly" aria-expanded="false" aria-controls="collapseExample">
-    Top Monthly Scores
-  </button>
-  
-  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#topWeekly" aria-expanded="false" aria-controls="collapseExample">
-    Top Weekly Scores
-  </button>
-  
-</p>
+	<div class="collapse" id="topLifetime">
 
-<div class="collapse" id="topLifetime">
-
-	<h4>Top Lifetime Scores</h4>
-	
-	<div class="list-group">
-		<?php if (isset($topLifetime) && count($topLifetime)): ?>
-			<div class="list-group-item font-weight-bold">
-				<div class="row">
-					<div class="col">
-						Ranking
-					</div>
-					<div class="col">
-						Score
-					</div>
-					<div class="col">
-						Date
-					</div>
-				</div>
-			</div>
-			
-			<?php foreach ($topLifetime as $score): ?>
-				
-				<div class="list-group-item">
-				
+		<h4>Top Lifetime Scores</h4>
+		
+		<div class="list-group">
+			<?php if (isset($topLifetime)): ?>
+				<div class="list-group-item font-weight-bold">
 					<div class="row">
 						<div class="col">
-							<?php safer_echo($rankingLife); $rankingLife++; ?>
+							Ranking
 						</div>
-						
 						<div class="col">
-							<?php safer_echo($score["score"]); ?>
+							Score
 						</div>
-						
 						<div class="col">
-							<?php safer_echo($score["created"]); ?>
+							Date
 						</div>
-						
 					</div>
 				</div>
 				
-			<?php endforeach; ?>
-			
-		<?php else: ?>
-			<div class="list-group-item">
-				You have no scores!
-			</div>
-		<?php endif; ?>
+				<?php foreach ($topLifetime as $score): ?>
+					
+					<div class="list-group-item">
+					
+						<div class="row">
+							<div class="col">
+								<?php safer_echo($rankingLife); $rankingLife++; ?>
+							</div>
+							
+							<div class="col">
+								<?php safer_echo($score["score"]); ?>
+							</div>
+							
+							<div class="col">
+								<?php safer_echo($score["created"]); ?>
+							</div>
+							
+						</div>
+					</div>
+					
+				<?php endforeach; ?>
+				
+			<?php else: ?>
+				<div class="list-group-item">
+					No scores available!
+				</div>
+			<?php endif; ?>
+		</div>
+
 	</div>
 
-</div>
+	<div class="collapse" id="topMonthly">
 
-<div class="collapse" id="topMonthly">
-
-	<h4>Top Monthly Scores</h4>
-	
-	<div class="list-group">
-		<?php if (isset($topMonthly) && count($topMonthly)): ?>
-			<div class="list-group-item font-weight-bold">
-				<div class="row">
-					<div class="col">
-						Ranking
-					</div>
-					<div class="col">
-						Score
-					</div>
-					<div class="col">
-						Date
-					</div>
-				</div>
-			</div>
-			
-			<?php foreach ($topMonthly as $score): ?>
-				
-				<div class="list-group-item">
-				
+		<h4>Top Monthly Scores</h4>
+		
+		<div class="list-group">
+			<?php if (isset($topMonthly)): ?>
+				<div class="list-group-item font-weight-bold">
 					<div class="row">
 						<div class="col">
-							<?php safer_echo($rankingMonth); $rankingMonth++; ?>
+							Ranking
 						</div>
-						
 						<div class="col">
-							<?php safer_echo($score["score"]); ?>
+							Score
 						</div>
-						
 						<div class="col">
-							<?php safer_echo($score["created"]); ?>
+							Date
 						</div>
-						
 					</div>
 				</div>
 				
-			<?php endforeach; ?>
-			
-		<?php else: ?>
-			<div class="list-group-item">
-				You have no scores!
-			</div>
-		<?php endif; ?>
+				<?php foreach ($topMonthly as $score): ?>
+					
+					<div class="list-group-item">
+					
+						<div class="row">
+							<div class="col">
+								<?php safer_echo($rankingMonth); $rankingMonth++; ?>
+							</div>
+							
+							<div class="col">
+								<?php safer_echo($score["score"]); ?>
+							</div>
+							
+							<div class="col">
+								<?php safer_echo($score["created"]); ?>
+							</div>
+							
+						</div>
+					</div>
+					
+				<?php endforeach; ?>
+				
+			<?php else: ?>
+				<div class="list-group-item">
+					No scores available!
+				</div>
+			<?php endif; ?>
+		</div>
+
 	</div>
 
-</div>
+	<div class="collapse" id="topWeekly">
 
-<div class="collapse" id="topWeekly">
-
-	<h4>Top Weekly Scores</h4>
-	
-	<div class="list-group">
-		<?php if (isset($topWeekly) && count($topWeekly)): ?>
-			<div class="list-group-item font-weight-bold">
-				<div class="row">
-					<div class="col">
-						Ranking
-					</div>
-					<div class="col">
-						Score
-					</div>
-					<div class="col">
-						Date
-					</div>
-				</div>
-			</div>
+		<h4>Top Weekly Scores</h4>
+		
+		<div class="list-group">
+			<?php if (isset($topWeekly)): ?>
 			
-			<?php foreach ($topWeekly as $score): ?>
-				
-				<div class="list-group-item">
-				
+				<div class="list-group-item font-weight-bold">
 					<div class="row">
 						<div class="col">
-							<?php safer_echo($rankingWeek); $rankingWeek++; ?>
+							Ranking
 						</div>
-						
 						<div class="col">
-							<?php safer_echo($score["score"]); ?>
+							Score
 						</div>
-						
 						<div class="col">
-							<?php safer_echo($score["created"]); ?>
+							Date
 						</div>
-						
 					</div>
 				</div>
 				
-			<?php endforeach; ?>
-			
-		<?php else: ?>
-			<div class="list-group-item">
-				You have no scores!
-			</div>
-		<?php endif; ?>
-	</div>
+				<?php foreach ($topWeekly as $score): ?>
+					
+					<div class="list-group-item">
+					
+						<div class="row">
+							<div class="col">
+								<?php safer_echo($rankingWeek); $rankingWeek++; ?>
+							</div>
+							
+							<div class="col">
+								<?php safer_echo($score["score"]); ?>
+							</div>
+							
+							<div class="col">
+								<?php safer_echo($score["created"]); ?>
+							</div>
+							
+						</div>
+					</div>
+					
+				<?php endforeach; ?>
+				
+			<?php else: ?>
+				<div class="list-group-item">
+					No scores available!
+				</div>
+				
+			<?php endif; ?>
+		</div>
 
-</div>
+	</div>
 	
-<br>
+	<br>
+	
+<?php endif; ?>
 
-<form method="POST">
-	<div class="form-group">
-		<label for="email">Email</label>
-		<input class="form-group" type="email" name="email" value="<?php safer_echo(get_email()); ?>"/>
-	</div>
-	
-	<div class="form-group">
-		<label for="username">Username</label>
-		<input class="form-group" type="text" maxlength="60" name="username" value="<?php safer_echo(get_username()); ?>"/>
-	</div>
-	
-	<div class="form-group">
-		<label for="currpw">Current Password</label>
-		<input class="form-group" type="password" name="current"/>
-	</div>
-	
-	<div class="form-group">
-		<label for="pw">New Password</label>
-		<input class="form-group" type="password" name="password"/>
-	</div>
-	
-	<div class="form-group">
-		<label for="cpw">Confirm New Password</label>
-		<input class="form-group" type="password" name="confirm"/>
-	</div>
-	
-    <input class="form-control" type="submit" name="saved" value="Save Profile"/>
-</form>
+
+<?php if (is_logged_in() && $userID == get_user_id()): 
+//If this profile is our own ?>
+
+	<form method="POST">
+		<div class="form-group">
+			<label for="email">Email</label>
+			<input class="form-group" type="email" name="email" value="<?php safer_echo(get_email()); ?>"/>
+		</div>
+		
+		<div class="form-group">
+			<label for="username">Username</label>
+			<input class="form-group" type="text" maxlength="60" name="username" value="<?php safer_echo(get_username()); ?>"/>
+		</div>
+		
+		<div class="form-group">
+			<label for="currpw">Current Password</label>
+			<input class="form-group" type="password" name="current"/>
+		</div>
+		
+		<div class="form-group">
+			<label for="pw">New Password</label>
+			<input class="form-group" type="password" name="password"/>
+		</div>
+		
+		<div class="form-group">
+			<label for="cpw">Confirm New Password</label>
+			<input class="form-group" type="password" name="confirm"/>
+		</div>
+		
+		<input class="form-control" type="submit" name="saved" value="Save Profile"/>
+	</form>
+
+<?php endif; ?>
 
 <!--
 
