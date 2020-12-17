@@ -41,7 +41,7 @@ if (isset($userID)) {
 }
 ?>
 
-<?php if (isset($userID)): ?>
+<?php if (isset($_SESSION["user"]) && isset($_SESSION["user"]["username"])): ?>
 
 	<p>
 		

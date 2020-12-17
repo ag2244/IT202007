@@ -135,8 +135,6 @@ function userIsPublic($userID) {
 		
 	return (int)$stmt->fetch(PDO::FETCH_ASSOC)["isPublic"];
 	
-	
-	
 }
 
 function getTopLifetime($userID) {

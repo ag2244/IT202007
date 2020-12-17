@@ -42,7 +42,7 @@ if (isset($_POST["join"])) {
 					$rLifetimePoints = $stmt->execute([ ":id"=>$user, ":newVal"=>getLifetimePoints() - $fee]);
 					
 					$stmt = $db->prepare("INSERT INTO PointsHistory (user_id, points_change, reason) VALUES(:user_id, :points_change, :reason)");
-
+					
 					$rPointsHistory = $stmt->execute([
 						":user_id"=>$user,
 						":points_change"=>$cost,
@@ -51,9 +51,9 @@ if (isset($_POST["join"])) {
 					
 					$stmt = $db->prepare("UPDATE Competitions SET reward = reward + :newAdd WHERE id = :compID");
 				
-					$stmt->execute([":compID" => $_POST["compID"], ":newAdd" = max(1, floor($fee/2))]);
+					$stmt->execute([":compID" => $_POST["compID"], ":newAdd" => max(1, floor($fee/2))]);
 					
-                    die(header("Location: #"));
+                    die(header("Location: #")); 
                 }
 			
 				else {flash("There was a problem joining the competition: " . var_export($stmt->errorInfo(), true), "danger");}
@@ -63,11 +63,12 @@ if (isset($_POST["join"])) {
 			else { flash("You can't afford to join this competition, try again later", "warning"); }
 		}
 		
-		 else { flash("You can't afford to join this competition, try again later", "warning"); } 
+		 else { flash("You can't afford to join this competition, try again later", "warning"); }
 	}
 	
-	else { flash("Competition is unavailable", "warning"); }
+	else { flash("Competition is unavailable"); }
 }
+
 
 $stmt = $db->prepare("SELECT comps.*, compParts.user_id as reg 
 	FROM Competitions comps 
@@ -96,17 +97,25 @@ else { flash("There was a problem looking up competitions: " . var_export($stmt-
                         <div class="col">
                             Participants
                         </div>
+						
                         <div class="col">
                             Required Score
                         </div>
+						
                         <div class="col">
                             Reward
                         </div>
+						
                         <div class="col">
                             Expires
                         </div>
+						
                         <div class="col">
                             Actions
+                        </div>
+						
+						<div class="col">
+						Top Ten Leaderboard
                         </div>
                     </div>
                 </div>
@@ -116,6 +125,7 @@ else { flash("There was a problem looking up competitions: " . var_export($stmt-
                     <div class="list-group-item">
 					
                         <div class="row">
+						
                             <div class="col">
                                 <?php safer_echo($r["name"]); ?>
                             </div>
@@ -142,12 +152,19 @@ else { flash("There was a problem looking up competitions: " . var_export($stmt-
                                     <form method="POST">
 									
                                         <input type="hidden" name="compID" value="<?php safer_echo($r["id"]); ?>"/>
-                                        <input type="submit" name="join" class="btn btn-primary"
-                                               value="Join (Cost: <?php safer_echo($r["fee"]); ?>)"/>
+										<input type="submit" name="join" class="btn btn-primary"
+											value="Join (Cost: <?php safer_echo($r["fee"]); ?>)"/>
                                     </form>
                                 <?php else: ?>
                                     Already Registered
                                 <?php endif; ?>
+                            </div>
+							
+							<div class="col">
+								<a class="btn btn-primary" href="<?php echo getURL("leaderboard.php"); ?>
+								?comp=
+								<?php safer_echo($r["id"]); ?>
+								" role="button">See Leaderboard</a>
                             </div>
 							
                         </div>
@@ -163,19 +180,6 @@ else { flash("There was a problem looking up competitions: " . var_export($stmt-
     </div>
 
 <?php require(__DIR__ . "/partials/flash.php");
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
