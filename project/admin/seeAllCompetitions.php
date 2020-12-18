@@ -2,7 +2,7 @@
 <?php
 if (!is_logged_in()) {
 	flash("You don't have permission to access this page");
-	die(header("Location: login.php"));
+	die(header("Location: /../login.php"));
 }
 ?>
 
@@ -134,31 +134,12 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </div>
 							
                             <div class="col">
-								<?php if($r["expires"] < date('Y-m-d H:i:s')): ?>
-                                    <form method="POST">
-									
-                                        <input type="hidden" name="compID" value="<?php safer_echo($r["id"]); ?>"/>
-										
-										<div class="form-group">
-											<label for="extraDuration">Extra Duration:</label>
-											<br>
-											<input class="form-group" type="extraDuration" id="extraDuration" name="extraDuration" />
-										</div>
-										
-										<input type="submit" name="restart" class="btn btn-primary"
-											value="Restart Competition"/>
-                                    </form>
-									
-								<?php elseif (($r["reg"] != get_user_id())): ?>
-                                    <form method="POST">
-									
-                                        <input type="hidden" name="compID" value="<?php safer_echo($r["id"]); ?>"/>
-										<input type="submit" name="join" class="btn btn-primary"
-											value="Join (Cost: <?php safer_echo($r["fee"]); ?>)"/>
-                                    </form>
-                                <?php else: ?>
-                                    Already Registered
-                                <?php endif; ?>
+								<div class="col">
+								<a class="btn btn-primary" href="<?php echo getURL("admin/editCompetition.php"); ?>
+								?comp=
+								<?php safer_echo($r["id"]); ?>
+								" role="button">Edit Competition</a>
+                            </div>
 									
                             </div>
 							
