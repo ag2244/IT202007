@@ -130,11 +130,11 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 							
                             <div class="col">
                                 <?php safer_echo($r["expires"]); ?>
-								<?php if($r["expires"] > date('Y-m-d H:i:s')) echo " <b>(EXPIRED!)</b>"?>
+								<?php if($r["expires"] < date('Y-m-d H:i:s')) echo " <b>(EXPIRED!)</b>"?>
                             </div>
 							
                             <div class="col">
-								<?php if($r["expires"] > date('Y-m-d H:i:s')): ?>
+								<?php if($r["expires"] < date('Y-m-d H:i:s')): ?>
                                     <form method="POST">
 									
                                         <input type="hidden" name="compID" value="<?php safer_echo($r["id"]); ?>"/>

@@ -116,7 +116,7 @@ function getProfileLink($userInfo) {
 		$userInfo["user_id"],
 		"'>",
 		$userInfo["username"],
-		""]
+		"</a>"]
 		);
 	}
 	
@@ -129,7 +129,7 @@ function getProfileLink($userInfo) {
 		$userInfo["id"],
 		"'>",
 		$userInfo["username"],
-		""]
+		"</a>"]
 		);
 	}
 	
