@@ -37,9 +37,22 @@ require_once(__DIR__ . "/../lib/helpers.php");
 		
 		<li class="nav-item"><a class="nav-link" href="<?php echo getURL("myScores.php"); ?>">My Scores</a></li>
 		
-		<li class="nav-item"><a class="nav-link" href="<?php echo getURL("competitions.php"); ?>">Competitions</a></li>
-	
-		<li class="nav-item"><a class="nav-link" href="<?php echo getURL("makeCompetition.php"); ?>">Start a Competition</a></li>
+		<li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+			   aria-haspopup="true" aria-expanded="false">
+				Competitions
+			</a>
+
+			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+			
+				<a class="dropdown-item" href="<?php echo getURL("competitions.php"); ?>">Competitions</a>
+				
+				<a class="dropdown-item" href="<?php echo getURL("competitionHistory.php"); ?>">Competition History</a>
+			
+				<a class="dropdown-item" href="<?php echo getURL("makeCompetition.php"); ?>">Start a Competition</a>
+			
+			</div>
+		</li>
 		
 		<li class="nav-item"><a class="nav-link" href="<?php echo getURL("profile.php"); ?>">Profile</a></li>
 		
