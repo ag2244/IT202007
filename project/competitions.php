@@ -6,7 +6,30 @@ if (!is_logged_in()) {
 }
 ?>
 
-<?php
+<?php //Page info
+$page = 1;
+$per_page = 10;
+
+if(isset($_GET["page"])){
+	try { $page = (int)$_GET["page"]; }
+	catch(Exception $e){ }
+}
+
+//Get number of entries
+$db = getDB();
+$stmt = $db->prepare("SELECT count(*) AS total FROM Competitions WHERE comps.expires > current_timestamp AND paid_out = 0");
+$stmt->execute([":id"=>get_user_id()]);
+$result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+//Set total number of pages
+$total = 0;
+if($result){ $total = (int)$result["total"]; }
+$total_pages = ceil($total / $per_page);
+$offset = ($page-1) * $per_page;
+
+?>
+
+<?php //Get Competitions
 
 
 $db = getDB();
@@ -76,18 +99,25 @@ $stmt = $db->prepare("SELECT comps.*, compParts.user_id as reg
 		(SELECT * FROM CompetitionParticipants where user_id = :user_id) 
 		as compParts on comps.id = compParts.comp_id 
 	WHERE comps.expires > current_timestamp AND paid_out = 0 
-	ORDER BY expires ASC");
-$r = $stmt->execute([":user_id" => get_user_id()]);
+	ORDER BY expires ASC LIMIT :offset, :count");
 
-if ($r) { $results = $stmt->fetchAll(PDO::FETCH_ASSOC); }
+$stmt->bindValue(":offset", $offset, PDO::PARAM_INT);
+$stmt->bindValue(":count", $per_page, PDO::PARAM_INT);
+$stmt->bindValue(":user_id", get_user_id());
+$stmt->execute();
 
-else { flash("There was a problem looking up competitions: " . var_export($stmt->errorInfo(), true), "danger"); }
+$e = $stmt->errorInfo();
+if($e[0] != "00000"){
+    flash(var_export($e, true), "alert");
+}
+$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
     <div class="container-fluid">
         <h3>Competitions</h3>
         <div class="list-group">
+		
             <?php if (isset($results) && count($results)): ?>
                 <div class="list-group-item font-weight-bold">
                     <div class="row">
@@ -177,6 +207,28 @@ else { flash("There was a problem looking up competitions: " . var_export($stmt-
                 </div>
             <?php endif; ?>
         </div>
+		
+		<p>
+		<!-- Pages -->
+		<nav aria-label="Competitions">
+            <ul class="pagination justify-content-center">
+                <li class="page-item <?php echo ($page-1) < 1?"disabled":"";?>">
+                    <a class="page-link" href="?page=<?php echo $page-1;?>" tabindex="-1">Previous</a>
+                </li>
+				
+                <?php for($i = 0; $i < $total_pages; $i++):?>
+				
+					<li class="page-item <?php echo ($page-1) == $i?"active":"";?>"><a class="page-link" href="?page=<?php echo ($i+1);?>"><?php echo ($i+1);?></a></li>
+				
+                <?php endfor; ?>
+				
+                <li class="page-item <?php echo ($page+1) >= $total_pages?"disabled":"";?>">
+                    <a class="page-link" href="?page=<?php echo $page+1;?>">Next</a>
+                </li>
+            </ul>
+        </nav>
+		</p>
+		
     </div>
 
 <?php require(__DIR__ . "/partials/flash.php");
