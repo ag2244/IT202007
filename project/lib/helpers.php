@@ -107,7 +107,20 @@ function endCompetition($compID) {
 
 function getProfileLink($userInfo) {
 	
-	if (isset($userInfo["id"]) && isset($userInfo["username"])) {
+	if (isset($userInfo["user_id"]) && isset($userInfo["username"])) {
+		
+		echo join ('',
+		["<a href='",
+		getURL("profile.php"),
+		"?id=",
+		$userInfo["user_id"],
+		"'>",
+		$userInfo["username"],
+		""]
+		);
+	}
+	
+	else if (isset($userInfo["id"]) && isset($userInfo["username"])) {
 		
 		echo join ('',
 		["<a href='",
@@ -121,7 +134,6 @@ function getProfileLink($userInfo) {
 	}
 	
 	else { flash ("UNABLE TO GET LINK"); }
-	
 }
 
 function userIsPublic($userID) {
@@ -132,8 +144,10 @@ function userIsPublic($userID) {
 	$stmt->execute([
 		":user_id" => $userID
 		]);
-		
-	return (int)$stmt->fetch(PDO::FETCH_ASSOC)["isPublic"];
+	
+	$result = $stmt->fetch(PDO::FETCH_ASSOC);
+	
+	return (int)$result["isPublic"];
 	
 }
 

@@ -166,6 +166,7 @@ if (isset($userID)) {
 	$rankingWeek = 1;
 	
 }
+
 ?>
 
 <br>
@@ -195,7 +196,8 @@ if (isset($userID)) {
 		</div>
 
 	<?php elseif (userIsPublic($userID)): ?>
-	
+		
+		<!-- If this is not our profile but it is public, display a greeting -->
 		<div class='card'>
 			<div class='card-header'>
 			<h3>Welcome to <?php echo getOtherUserInfo($userID)["username"]; ?>'s profile!</h3>
@@ -209,8 +211,8 @@ if (isset($userID)) {
 		</div>
 	
 	<?php else: ?>
-	
-	<div class='card'>
+		<!-- If this is a private profile, display a helpful message -->
+		<div class='card'>
 			<div class='card-header'>
 			<h3>This profile is private</h3>
 			</div>
@@ -249,6 +251,7 @@ if (isset($userID)) {
 	  
 	</p>
 
+	<p>
 	<div class="collapse" id="topLifetime">
 
 		<h4>Top Lifetime Scores</h4>
@@ -299,7 +302,9 @@ if (isset($userID)) {
 		</div>
 
 	</div>
-
+	</p>
+	
+	<p>
 	<div class="collapse" id="topMonthly">
 
 		<h4>Top Monthly Scores</h4>
@@ -350,7 +355,9 @@ if (isset($userID)) {
 		</div>
 
 	</div>
-
+	</p>
+	
+	<p>
 	<div class="collapse" id="topWeekly">
 
 		<h4>Top Weekly Scores</h4>
@@ -403,6 +410,7 @@ if (isset($userID)) {
 		</div>
 
 	</div>
+	</p>
 	
 	<br>
 	

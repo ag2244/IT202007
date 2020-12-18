@@ -48,7 +48,7 @@
 	
 	$allValidScores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	
-	//echo '<pre>'; var_dump($allScores); echo '</pre>';
+	//echo '<pre>'; var_dump($allValidScores); echo '</pre>';
 	
 	$ranking = 1;
 
@@ -99,7 +99,7 @@
 						</div>
 						
 						<div class="col">
-							<?php safer_echo($score["username"]); ?>
+							<?php echo getProfileLink($score);?>
 						</div>
 						
 					</div>

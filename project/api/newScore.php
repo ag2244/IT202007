@@ -7,13 +7,6 @@ if (!is_logged_in()) {
 	die();
 }
 
-/*
-$testing = false;
-if (isset($_GET["test"])) {
-    $testing = true;
-}
-*/
-
 //INSERT NEW SCORE INTO SCORES TABLE
 $userID = get_user_id();
 $score = $_POST["score"];
