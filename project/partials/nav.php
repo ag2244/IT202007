@@ -57,6 +57,8 @@ require_once(__DIR__ . "/../lib/helpers.php");
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 			
 				<a class="dropdown-item" href="<?php echo getURL("admin/allProfiles.php"); ?>">All Profiles</a>
+				
+				<a class="dropdown-item" href="<?php echo getURL("admin/seeAllCompetitions.php"); ?>">All Competitions</a>
 			
 				<a class="dropdown-item" href="<?php echo getURL("test/test_create_scores.php"); ?>">Create Score Entry</a>
 				
